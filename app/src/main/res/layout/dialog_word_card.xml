@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_word_card_name"
+            android:text="@string/word_name_hint"
+            android:textSize="16sp"
+            />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:hint="@string/word_name_hint"
+            android:id="@+id/dialog_word_card_name_edit"
+            android:inputType="textPersonName"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_word_card_def"
+            android:text="@string/word_definition_hint"
+            android:textSize="16sp"
+            />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_word_card_def_edit"
+            android:hint="@string/word_definition_hint"
+            android:inputType="textMultiLine"
+            />
+
+    </LinearLayout>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Continue creating cards"
+        android:id="@+id/continue_creating_word_cards"
+        android:textSize="16sp"
+        android:textColor="@color/colorSecondaryText"
+        android:padding="8dp"
+        />
+
+</LinearLayout>

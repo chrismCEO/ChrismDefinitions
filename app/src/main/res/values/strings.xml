@@ -1,0 +1,27 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Word Cards</string>
+    <string name="action_settings">Settings</string>
+    <string name="empty_view_text">No folders created. Click on the + button to add a folder</string>
+    <string name="title_activity_word_card">Word cards</string>
+    <string name="empty_view_word_cards">No word cards created for this folder. Click on the + button to add a word card</string>
+    <string name="create_folder">Create folder</string>
+    <string name="folder_name_hint">Folder name</string>
+    <string name="ok_dialog">OK</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="word_name_hint">Word name</string>
+    <string name="word_definition_hint">Word definition</string>
+    <string name="search_word">Search word</string>
+    <string name="search_result_title">Search result: \"<xliff:g id="title">%s</xliff:g>\"</string>
+    <string name="delete_folder">Delete folder \"<xliff:g id="folderName">%s</xliff:g>\"?</string>
+    <string name="delete">Delete</string>
+    <string name="folder_deleted">Folder deleted \"<xliff:g id="folderName">%s</xliff:g>\"</string>
+    <string name="delete_word_dialog">Delete word card \"<xliff:g id="wordName">%s</xliff:g>\"?</string>
+    <string name="edit_folder_header">Edit folder</string>
+    <string name="create_folder_header">Create folder</string>
+    <string name="dialog_edit_word_card">Edit word card</string>
+    <string name="dialog_create_word_card">Create word card</string>
+    <string name="empty_folder_name_check">Folder name cannot be empty</string>
+    <string name="empty_word_card_name_check">Word card name cannot be empty</string>
+    <string name="empty_word_card_text_check">Word card text cannot be empty</string>
+    <string name="folder">Folder</string>
+</resources>
