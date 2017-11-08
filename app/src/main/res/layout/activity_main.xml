@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/app_name"
+            app:title="@string/app_name_no_chrism"
             />
 
     </android.support.design.widget.AppBarLayout>
