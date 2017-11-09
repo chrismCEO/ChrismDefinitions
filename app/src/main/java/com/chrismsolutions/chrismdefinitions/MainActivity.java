@@ -17,9 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
@@ -99,6 +97,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Send a query to the database for all folders
+     * @return A cursor with the data of all folders
+     */
     @org.jetbrains.annotations.Contract(pure = true)
     private Cursor readFolderDataFromDB()
     {
@@ -117,6 +119,11 @@ public class MainActivity extends AppCompatActivity
                 null);
     }
 
+    /**
+     * Attach a SearchView to the menu, so that it appears in the Toolbar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

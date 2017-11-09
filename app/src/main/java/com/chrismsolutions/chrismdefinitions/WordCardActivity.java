@@ -1,5 +1,6 @@
 package com.chrismsolutions.chrismdefinitions;
 
+import android.annotation.SuppressLint;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentUris;
@@ -11,7 +12,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -37,7 +37,7 @@ public class WordCardActivity extends AppCompatActivity
     private static final String SQL_JOKER_ID = "=?";
     private static final String QUERY_FOLDER_ID = "Folder";
     private Cursor folderCursor;
-    ExpandableWordCardListAdapter wordCardAdapter;
+    private ExpandableWordCardListAdapter wordCardAdapter;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
     private HashMap<Integer, Integer> listDataChildIds;
@@ -45,10 +45,10 @@ public class WordCardActivity extends AppCompatActivity
 
     private boolean showAds;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_word_card);
 
         showAds = ChrismAdHelper.showAd();
         if (showAds)
@@ -94,6 +94,7 @@ public class WordCardActivity extends AppCompatActivity
 
                     if (folderCursor != null && folderCursor.moveToNext())
                     {
+                        //Set the title to the folder name
                         setTitle(getFolderName());
                     }
                 }
@@ -147,6 +148,11 @@ public class WordCardActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Get the folder these words belong to.
+     * @param idFolder
+     * @return A cursor of the parent folder
+     */
     private Cursor getFolderCursor(int idFolder)
     {
         String[] projection = {
@@ -165,6 +171,9 @@ public class WordCardActivity extends AppCompatActivity
                 null);
     }
 
+    /**
+     * Get all word cards for the selected folder
+     */
     private void readWordCardDataFromDB()
     {
         String[] projection = {
@@ -178,7 +187,8 @@ public class WordCardActivity extends AppCompatActivity
         String[] selectionArgs = null;
         if (!TextUtils.isEmpty(nameQuery))
         {
-            selection = /*DefinitionsEntry.TABLE_NAME_WORD_CARDS + "." + */DefinitionsEntry.COLUMN_WORD_CARD_NAME + " LIKE ?";
+            //The user has searched for a word, we need to filter the wordCards table for this name
+            selection = DefinitionsEntry.COLUMN_WORD_CARD_NAME + " LIKE ?";
             selectionArgs = new String[]{"%" + nameQuery + "%"};
         }
         cursor = getContentResolver().query(
@@ -204,6 +214,11 @@ public class WordCardActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Get the word card ID from the record
+     * @param cursor
+     * @return
+     */
     private Integer getWordId(Cursor cursor)
     {
         int columnIndex = cursor.getColumnIndexOrThrow(DefinitionsEntry._ID);
@@ -212,6 +227,11 @@ public class WordCardActivity extends AppCompatActivity
         return id;
     }
 
+    /**
+     * Get the word card name from the record
+     * @param cursor
+     * @return
+     */
     private String getWordName(Cursor cursor)
     {
         int columnIndex = cursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_NAME);
@@ -220,6 +240,11 @@ public class WordCardActivity extends AppCompatActivity
         return name;
     }
 
+    /**
+     * Get the word card text/definition from the cursor
+     * @param cursor
+     * @return
+     */
     private String getWordDefinition(Cursor cursor)
     {
         int columnIndex = cursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_TEXT);
@@ -228,6 +253,10 @@ public class WordCardActivity extends AppCompatActivity
         return def;
     }
 
+    /**
+     * Get the folder name from the folder cursor
+     * @return
+     */
     private String getFolderName()
     {
         int columnIndex = folderCursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_FOLDER_NAME);
@@ -235,6 +264,10 @@ public class WordCardActivity extends AppCompatActivity
         return folderName;
     }
 
+    /**
+     * Get the folder ID from the folder cursor
+     * @return
+     */
     private int getFolderId()
     {
         int id = 0;
@@ -278,10 +311,9 @@ public class WordCardActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader<Cursor> loader)
     {
-        //wordCardAdapter.swapCursor(null);
-        //wordCardAdapter.setNewItems(null, null, null);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();

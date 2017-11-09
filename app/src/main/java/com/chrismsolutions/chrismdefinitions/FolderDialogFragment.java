@@ -34,12 +34,17 @@ public class FolderDialogFragment extends DialogFragment
         super();
     }
 
+    /**
+     * Show the dialog for either new or existing folders.
+     * @param savedInstanceState
+     * @return
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle arguments = getArguments();
 
-        final boolean edit;// = arguments.getBoolean(DIALOG_EDIT);
+        final boolean edit;
 
         final Context context = getActivity();
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);

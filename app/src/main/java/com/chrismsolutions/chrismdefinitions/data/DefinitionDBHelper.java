@@ -29,9 +29,6 @@ public class DefinitionDBHelper extends SQLiteOpenHelper
             "CREATE TABLE " + DefinitionsEntry.TABLE_NAME_LINK + " ("
             + DefinitionsEntry.COLUMN_LINK_FOLDER_ID + " INT NOT NULL, "
             + DefinitionsEntry.COLUMN_LINK_WORD_CARD_ID + " INT NOT NULL); ";
-            /*+ "FOREIGN KEY (" + DefinitionsEntry.COLUMN_LINK_WORD_CARD_ID
-                    + ") REFERENCES " +
-                    DefinitionsEntry.TABLE_NAME_WORD_CARDS+"("+ DefinitionsEntry._ID+"));";*/
 
     public DefinitionDBHelper(Context context)
     {

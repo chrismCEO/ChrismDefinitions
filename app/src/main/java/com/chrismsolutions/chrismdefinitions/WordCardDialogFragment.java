@@ -34,13 +34,18 @@ public class WordCardDialogFragment extends DialogFragment
     private static final String DIALOG_CONTINUE = "dialog_continue";
 
 
+    /**
+     * Show the dialog for new or existing word cards. If the checkbox is checked, continue showing
+     * the dialog to quickly create new word cards
+     * @param savedInstanceState
+     * @return
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         final Context dialogContext = getActivity();
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(dialogContext);
-        final int idLocal;
         final boolean edit;
 
         final View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_word_card, null);

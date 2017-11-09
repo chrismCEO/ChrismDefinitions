@@ -85,6 +85,15 @@ public class DefinitionProvider extends ContentProvider
         return true;
     }
 
+    /**
+     * Perform a query on the database.
+     * @param uri
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     * @return Cursor of the result of the query
+     */
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri,
@@ -93,7 +102,7 @@ public class DefinitionProvider extends ContentProvider
                         @Nullable String[] selectionArgs,
                         @Nullable String sortOrder)
     {
-        SQLiteQueryBuilder database = new SQLiteQueryBuilder();//mDBHelper.getReadableDatabase();
+        SQLiteQueryBuilder database = new SQLiteQueryBuilder();
         Cursor cursor = null;
         int match = sUriMatcher.match(uri);
         String type = "";
@@ -227,6 +236,13 @@ public class DefinitionProvider extends ContentProvider
         return type;
     }
 
+    /**
+     * Insert new data into either the folders or wordCards table. When inserting into the wordCards
+     * table we also need to insert a link between the folder and the word card
+     * @param uri
+     * @param values
+     * @return A Uri with the ID of the newly created post
+     */
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values)
@@ -252,6 +268,11 @@ public class DefinitionProvider extends ContentProvider
         return uriLocal;
     }
 
+    /**
+     * Insert a link between the folder and the word card.
+     * @param uriLocal
+     * @param folderId
+     */
     private void insertLink(Uri uriLocal, long folderId)
     {
         SQLiteDatabase database = mDBHelper.getWritableDatabase();
@@ -266,6 +287,13 @@ public class DefinitionProvider extends ContentProvider
         }
     }
 
+    /**
+     * Insert a new record into the given table with the user-given values
+     * @param tableName
+     * @param uri
+     * @param values
+     * @return
+     */
     private Uri insertTable(String tableName, Uri uri, ContentValues values)
     {
         Uri uriLocal = null;
@@ -290,6 +318,15 @@ public class DefinitionProvider extends ContentProvider
         return uriLocal;
     }
 
+    /**
+     * Deletion of a specific record. If the record is of wordCard, we also need to delete the
+     * link record. If the record is a folder, delete all links to that folder, and then check to
+     * see if the wordCards are not associated to another folder.
+     * @param uri
+     * @param selection
+     * @param selectionArgs
+     * @return A count of the number of records deleted
+     */
     @Override
     public int delete(@NonNull Uri uri,
                       @Nullable String selection,
@@ -365,6 +402,12 @@ public class DefinitionProvider extends ContentProvider
         return result;
     }
 
+    /**
+     * Setup the deletion of link records
+     * @param database
+     * @param selectionArgs
+     * @param linkType
+     */
     private void deleteLink(SQLiteDatabase database, String[] selectionArgs, String linkType)
     {
         String selection = linkType + SQL_JOKER_ID;
@@ -376,9 +419,16 @@ public class DefinitionProvider extends ContentProvider
         }
 
         deleteLinkWordCards(database, linkType, selection, selectionArgs);
-        //database.delete(DefinitionsEntry.TABLE_NAME_LINK, selection, selectionArgs);
     }
 
+    /**
+     * Go through all the link records and check if they are unique. If they are, delete the wordCards
+     * associated link, otherwise only delete the link.
+     * @param database
+     * @param linkType
+     * @param selection
+     * @param selectionArgs
+     */
     private void deleteLinkWordCards(SQLiteDatabase database,
                                      String linkType,
                                      String selection,
@@ -447,6 +497,14 @@ public class DefinitionProvider extends ContentProvider
         cursor.close();
     }
 
+    /**
+     * Update the given record with the user-given values. This is straight-forward
+     * @param uri
+     * @param values
+     * @param selection
+     * @param selectionArgs
+     * @return
+     */
     @Override
     public int update(@NonNull Uri uri,
                       @Nullable ContentValues values,
@@ -492,6 +550,15 @@ public class DefinitionProvider extends ContentProvider
         return result;
     }
 
+    /**
+     * Update the given record(s) if the values are valid
+     * @param tableName
+     * @param uri
+     * @param values
+     * @param selection
+     * @param selectionArgs
+     * @return
+     */
     private int updateTable(String tableName,
                             Uri uri,
                             ContentValues values,
@@ -519,6 +586,12 @@ public class DefinitionProvider extends ContentProvider
         return id;
     }
 
+    /**
+     * Check the values given by the user to see if they are valid
+     * @param tableName
+     * @param values
+     * @return
+     */
     private boolean checkValues(String tableName, ContentValues values)
     {
         boolean ok = true;
@@ -540,6 +613,11 @@ public class DefinitionProvider extends ContentProvider
         return ok;
     }
 
+    /**
+     * Check the values for word cards. Name and text cannot be empty
+     * @param values
+     * @return
+     */
     private boolean checkWordCardValues(ContentValues values)
     {
         boolean ok = true;
@@ -566,6 +644,11 @@ public class DefinitionProvider extends ContentProvider
         return ok;
     }
 
+    /**
+     * Check the values for folders. Name cannot be empty
+     * @param values
+     * @return
+     */
     private boolean checkFolderValues(ContentValues values)
     {
         boolean ok = true;

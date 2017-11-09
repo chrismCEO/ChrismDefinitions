@@ -34,6 +34,12 @@ public class FolderCursorAdapter extends CursorAdapter
         return LayoutInflater.from(context).inflate(R.layout.list_item_folders, parent, false);
     }
 
+    /**
+     * Show the data in the folder cursor and bind the values to the correct Views
+     * @param view
+     * @param context
+     * @param cursor
+     */
     @Override
     public void bindView(View view, final Context context, final Cursor cursor)
     {
@@ -68,7 +74,6 @@ public class FolderCursorAdapter extends CursorAdapter
                 FolderDialogFragment fragment = new FolderDialogFragment();
                 fragment.setArguments(arguments);
                 fragment.show(fragmentActivity.getSupportFragmentManager(), FolderDialogFragment.DIALOG_TAG);
-                //DialogHelper.newFolderDialog(context, true, id, name);
             }
         });
     }

@@ -24,6 +24,13 @@ public class DialogHelper
 {
     private static final String SQL_JOKER_ID = "=?";
 
+    /**
+     * Show a dialog to have the user confirm they actually wish to delete the folder. If OK, call
+     * the delete method in the provider.
+     * @param context
+     * @param id
+     * @param folderName
+     */
     public static void deleteFolderConfirmationDialog(final Context context,
                                                       final int id,
                                                       final String folderName)
@@ -60,6 +67,14 @@ public class DialogHelper
         alertDialog.show();
     }
 
+    /**
+     * Show a dialog to have the user confirm they actually wish to delete the word card. If OK, call
+     * the delete method in the provider.
+     * @param context
+     * @param wordCardId
+     * @param folderId
+     * @param wordName
+     */
     public static void deleteWordCardConfirmationDialog(final Context context,
                                                         final int wordCardId,
                                                         final int folderId,

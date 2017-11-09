@@ -78,6 +78,14 @@ public class ExpandableWordCardListAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+    /**
+     * Show the header of the word card, the word itself
+     * @param groupPosition
+     * @param b
+     * @param view
+     * @param viewGroup
+     * @return
+     */
     @Override
     public View getGroupView(int groupPosition, boolean b, View view, ViewGroup viewGroup) {
         String headerTitle = (String) getGroup(groupPosition);
@@ -94,6 +102,15 @@ public class ExpandableWordCardListAdapter extends BaseExpandableListAdapter {
         return view;
     }
 
+    /**
+     * Show the text/definition of the word
+     * @param groupPosition
+     * @param childPosition
+     * @param isLastChild
+     * @param view
+     * @param viewGroup
+     * @return
+     */
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
         final String childText = (String) getChild(groupPosition, childPosition);
