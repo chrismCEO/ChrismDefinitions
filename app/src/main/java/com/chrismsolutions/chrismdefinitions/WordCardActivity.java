@@ -110,6 +110,7 @@ public class WordCardActivity extends AppCompatActivity
             //The user has searched for a word, get the search word
             nameQuery = callerIntent.getStringExtra(SearchManager.QUERY).trim();
             setTitle(getString(R.string.search_result_title, nameQuery.replace("%", "")));
+            fabWordCard.setVisibility(View.GONE);
 
             //check for folder ID
             Bundle appData = callerIntent.getBundleExtra(SearchManager.APP_DATA);
