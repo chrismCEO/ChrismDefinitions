@@ -23,6 +23,7 @@ import android.widget.ExpandableListView;
 
 import com.chrismsolutions.chrismdefinitions.data.DefinitionProvider;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,10 +43,23 @@ public class WordCardActivity extends AppCompatActivity
     private HashMap<Integer, Integer> listDataChildIds;
     private String nameQuery;
 
+    private boolean showAds;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_word_card);
+        //setContentView(R.layout.activity_word_card);
+
+        showAds = ChrismAdHelper.showAd();
+        if (showAds)
+        {
+            setContentView(R.layout.activity_word_card_ads);
+        }
+        else
+        {
+            setContentView(R.layout.activity_word_card);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
@@ -123,6 +137,14 @@ public class WordCardActivity extends AppCompatActivity
         listViewWordCards.setEmptyView(findViewById(R.id.empty_view_word_cards));
         
         getLoaderManager().initLoader(LOADER_ID, null, this);
+
+        //Ad management
+        AdView adView = (AdView) findViewById(R.id.adViewBannerWordCard);
+        if (showAds)
+        {
+            ChrismAdHelper.createFolderAd(this, adView);
+        }
+
     }
 
     private Cursor getFolderCursor(int idFolder)

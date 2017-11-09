@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.chrismsolutions.chrismdefinitions.MainActivity"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        >
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -24,11 +24,23 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <com.google.android.gms.ads.AdView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        ads:adSize="BANNER"
+        app:adUnitId="@string/adBannerUnitIdTest"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/adViewBannerFolder"
+        />
+
     <include layout="@layout/content_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_below="@id/adViewBannerFolder"
         android:layout_marginBottom="?attr/actionBarSize"
         android:id="@+id/contentMainLayout"
         />

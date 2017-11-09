@@ -5,12 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.chrismsolutions.chrismdefinitions.WordCardActivity"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     >
+
+    <com.google.android.gms.ads.AdView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        ads:adSize="BANNER"
+        app:adUnitId="@string/adBannerUnitIdTest"
+        android:id="@+id/adViewBannerWordCard"
+        />
+
 
     <include layout="@layout/content_word_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@id/adViewBannerWordCard"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="?attr/actionBarSize"
         android:id="@+id/contentMainLayout"
         />

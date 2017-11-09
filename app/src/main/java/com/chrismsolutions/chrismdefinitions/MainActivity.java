@@ -17,10 +17,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AppCompatActivity
     implements LoaderManager.LoaderCallbacks<Cursor>
@@ -29,11 +32,23 @@ public class MainActivity extends AppCompatActivity
     private static final String URI_STRING = "uri";
     private static final int LOADER_ID = 1;
     FolderCursorAdapter adapter;
+    private boolean showAds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        //Show ads if user has not payed to suppress them
+        showAds = ChrismAdHelper.showAd();
+        if (showAds)
+        {
+            setContentView(R.layout.activity_main_ads);
+        }
+        else
+        {
+            setContentView(R.layout.activity_main);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,7 +66,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 FolderDialogFragment fragment = new FolderDialogFragment();
                 fragment.show(getSupportFragmentManager(), FolderDialogFragment.DIALOG_TAG);
-                //DialogHelper.newFolderDialog(MainActivity.this, false, 0, "");
             }
         });
 
@@ -77,7 +91,12 @@ public class MainActivity extends AppCompatActivity
         //For test purposes only
         //TestDB.testDB(MainActivity.this);
 
-        //TODO: Spiffy up empty_view
+        //Ad management
+        AdView adView = (AdView) findViewById(R.id.adViewBannerFolder);
+        if (showAds)
+        {
+            ChrismAdHelper.createFolderAd(this, adView);
+        }
     }
 
     @org.jetbrains.annotations.Contract(pure = true)

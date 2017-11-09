@@ -25,4 +25,6 @@
     <string name="empty_word_card_name_check">Word card name cannot be empty</string>
     <string name="empty_word_card_text_check">Word card text cannot be empty</string>
     <string name="folder">Folder</string>
+    <string name="adBannerUnitIdTest">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="folder_name_dialog">Folder name:</string>
 </resources>
