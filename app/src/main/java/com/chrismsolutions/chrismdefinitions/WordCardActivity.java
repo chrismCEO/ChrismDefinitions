@@ -117,10 +117,13 @@ public class WordCardActivity extends AppCompatActivity
             if (appData != null)
             {
                 int folderId = appData.getInt(QUERY_FOLDER_ID);
-                folderCursor = getFolderCursor(folderId);
-                if (folderCursor != null)
+                if (folderId != 0)
                 {
-                    folderCursor.moveToNext();
+                    folderCursor = getFolderCursor(folderId);
+                    if (folderCursor != null)
+                    {
+                        folderCursor.moveToNext();
+                    }
                 }
             }
         }
