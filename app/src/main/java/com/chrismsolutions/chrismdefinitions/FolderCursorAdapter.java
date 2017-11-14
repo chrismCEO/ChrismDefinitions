@@ -2,7 +2,6 @@ package com.chrismsolutions.chrismdefinitions;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chrismsolutions.chrismdefinitions.data.DefinitionProvider;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
 
 /**

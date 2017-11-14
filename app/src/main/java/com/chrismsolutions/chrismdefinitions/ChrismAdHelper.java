@@ -1,6 +1,7 @@
 package com.chrismsolutions.chrismdefinitions;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.view.View;
 
 import com.google.android.gms.ads.AdRequest;
@@ -33,5 +34,10 @@ public class ChrismAdHelper
     public static boolean showAd()
     {
         return false;
+    }
+
+    public boolean isTestDevice(Context context)
+    {
+        return Boolean.valueOf(Settings.System.getString(context.getContentResolver(), "firebase.test.lab"));
     }
 }
