@@ -104,8 +104,6 @@ public class MainActivity extends AppCompatActivity
     @org.jetbrains.annotations.Contract(pure = true)
     private Cursor readFolderDataFromDB()
     {
-        Cursor cursor = null;
-
         String[] projection = {
                 DefinitionsEntry._ID,
                 DefinitionsEntry.COLUMN_FOLDER_NAME

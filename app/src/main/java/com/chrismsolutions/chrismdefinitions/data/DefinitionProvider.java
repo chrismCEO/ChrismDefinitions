@@ -1,10 +1,8 @@
 package com.chrismsolutions.chrismdefinitions.data;
 
-import android.app.AlertDialog;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,8 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.chrismsolutions.chrismdefinitions.R;
@@ -568,7 +564,7 @@ public class DefinitionProvider extends ContentProvider
         SQLiteDatabase database = mDBHelper.getWritableDatabase();
         int id = 0;
 
-        if (values.size() > 1 && checkValues(tableName, values))
+        if (values.size() > 0 && checkValues(tableName, values))
         {
             id = database.update(tableName, values, selection, selectionArgs);
 

@@ -2,6 +2,7 @@ package com.chrismsolutions.chrismdefinitions;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -100,9 +101,12 @@ public class FolderDialogFragment extends DialogFragment
                         ContentValues values = new ContentValues();
                         values.put(DefinitionsContract.DefinitionsEntry.COLUMN_FOLDER_NAME, folderNameLocal);
 
-                        if (!edit) {
+                        if (!edit)
+                        {
                             context.getContentResolver().insert(DefinitionsContract.DefinitionsEntry.CONTENT_URI_FOLDER, values);
-                        } else {
+                        }
+                        else
+                        {
                             String selection = DefinitionsContract.DefinitionsEntry._ID + DefinitionProvider.getSqlJokerId();
                             String[] selectionArgs = {String.valueOf(id)};
                             context.getContentResolver().update(
