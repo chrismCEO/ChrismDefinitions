@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.RelativeLayout;
 
 import com.chrismsolutions.chrismdefinitions.data.DefinitionProvider;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
@@ -50,7 +51,7 @@ public class WordCardActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        showAds = ChrismAdHelper.showAd();
+        showAds = ChrismAdHelper.showAd(this);
         if (showAds)
         {
             setContentView(R.layout.activity_word_card_ads);
@@ -144,10 +145,10 @@ public class WordCardActivity extends AppCompatActivity
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
         //Ad management
-        AdView adView = (AdView) findViewById(R.id.adViewBannerWordCard);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relative_layout_word_cards);
         if (showAds)
         {
-            ChrismAdHelper.createFolderAd(this, adView);
+            ChrismAdHelper.createAd(this, relativeLayout);
         }
 
     }

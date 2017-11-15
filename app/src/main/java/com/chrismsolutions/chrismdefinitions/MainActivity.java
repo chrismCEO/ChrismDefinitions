@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
 import com.google.android.gms.ads.AdView;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         //Show ads if user has not payed to suppress them
-        showAds = ChrismAdHelper.showAd();
+        showAds = ChrismAdHelper.showAd(this);
         if (showAds)
         {
             setContentView(R.layout.activity_main_ads);
@@ -90,10 +91,10 @@ public class MainActivity extends AppCompatActivity
         //TestDB.testDB(MainActivity.this);
 
         //Ad management
-        AdView adView = (AdView) findViewById(R.id.adViewBannerFolder);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relative_layout_main);
         if (showAds)
         {
-            ChrismAdHelper.createFolderAd(this, adView);
+            ChrismAdHelper.createAd(this, relativeLayout);
         }
     }
 

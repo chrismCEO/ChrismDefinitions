@@ -26,5 +26,6 @@
     <string name="empty_word_card_text_check">Word card text cannot be empty</string>
     <string name="folder">Folder</string>
     <string name="adBannerUnitIdTest">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adBannerUnitId">ca-app-pub-1334181107218958/8496650005</string>
     <string name="folder_name_dialog">Folder name:</string>
 </resources>
