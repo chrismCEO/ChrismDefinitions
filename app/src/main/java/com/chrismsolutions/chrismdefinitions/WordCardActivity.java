@@ -18,13 +18,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
 
+import com.chrismsolutions.chrismdefinitions.billingUtil.IabHelper;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionProvider;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
-import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,14 +45,28 @@ public class WordCardActivity extends AppCompatActivity
     private HashMap<Integer, Integer> listDataChildIds;
     private String nameQuery;
 
-    private boolean showAds;
-
+    private boolean showAds = false;
+    ChrismAdHelper adHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        showAds = ChrismAdHelper.showAd(this);
+        //Check appData if we come here via search
+        Intent callerIntent = getIntent();
+        if (callerIntent.getAction() != null && callerIntent.getAction().equals(Intent.ACTION_SEARCH))
+        {
+            Bundle appData = callerIntent.getBundleExtra(SearchManager.APP_DATA);
+            if (appData != null)
+            {
+                showAds = !appData.getBoolean(MainActivity.IS_PREMIUM_USER);
+            }
+        }
+
+        if (getIntent() != null && getIntent().hasExtra(MainActivity.IS_PREMIUM_USER))
+        {
+            showAds = !getIntent().getBooleanExtra(MainActivity.IS_PREMIUM_USER, false);
+        }
         if (showAds)
         {
             setContentView(R.layout.activity_word_card_ads);
@@ -79,7 +94,7 @@ public class WordCardActivity extends AppCompatActivity
         });
 
         //Get the information from the caller folder
-        Intent callerIntent = getIntent();
+        callerIntent = getIntent();
 
         if (callerIntent != null)
         {
@@ -118,6 +133,7 @@ public class WordCardActivity extends AppCompatActivity
             if (appData != null)
             {
                 int folderId = appData.getInt(QUERY_FOLDER_ID);
+                showAds = !appData.getBoolean(MainActivity.IS_PREMIUM_USER);
                 if (folderId != 0)
                 {
                     folderCursor = getFolderCursor(folderId);
@@ -148,7 +164,7 @@ public class WordCardActivity extends AppCompatActivity
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relative_layout_word_cards);
         if (showAds)
         {
-            ChrismAdHelper.createAd(this, relativeLayout);
+             adHelper  = ChrismAdHelper.createAdStatic(this, relativeLayout);
         }
 
     }
@@ -322,15 +338,16 @@ public class WordCardActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.menu_word_card, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.searchFolder).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.searchFolderWordCards).getActionView();
 
 
         //Include folderId
         Bundle appData = new Bundle();
         appData.putInt(QUERY_FOLDER_ID, getFolderId());
+        appData.putBoolean(MainActivity.IS_PREMIUM_USER, !showAds);
         //noinspection RestrictedApi
         searchView.setAppSearchData(appData);
 
@@ -339,5 +356,47 @@ public class WordCardActivity extends AppCompatActivity
         searchView.requestFocus();
 
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (adHelper != null)
+        {
+            IabHelper mHelper = adHelper.getIabHelper();
+            if (mHelper != null)
+            {
+                try {
+                    mHelper.dispose();
+                } catch (IabHelper.IabAsyncInProgressException e) {
+                    e.printStackTrace();
+                }
+            }
+            mHelper = null;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home)
+        {
+            goBack();
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        goBack();
+    }
+
+    private void goBack()
+    {
+        Intent intent = new Intent(WordCardActivity.this, MainActivity.class);
+        intent.putExtra(MainActivity.IS_PREMIUM_USER, !showAds);
+        startActivity(intent);
     }
 }

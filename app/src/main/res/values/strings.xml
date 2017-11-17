@@ -27,5 +27,11 @@
     <string name="folder">Folder</string>
     <string name="adBannerUnitIdTest">ca-app-pub-3940256099942544/6300978111</string>
     <string name="adBannerUnitId">ca-app-pub-1334181107218958/8496650005</string>
+    <string name="billing_encoded_public_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxPB4euhHyShikxl2lWYbgqrjnFKlQC9WygCMvRIqEVKpm+/bY46s1LzJ1TJ6RJpszGOjczgOTV+dj0Im9l5wcUmMg7wW2pWrvWcD5vAmGARbMrhX8ys7ADoM/kJJMqb657m6XYTvQ6pcn8hHjxkugn5A0W0MMSqlTm/FQApFMagOF6RFBxlABpUM7P2DT80hmmYCu6O9IjE3jSMfj+L3bE2UABJHwR3x6cSuqfx9qxrOjUp0ClG+1ZmhHkGbKY8pghhko+JApTIOxBs5rsE1eB6otmEw3sJUEkfsfSw8gT3CV0Fuosjt/vxLg3N3jW+UPva9pSr5V/KGeRCK0KN4UwIDAQAB</string>
+    <string name="premium_product_id">com.chrismsolutions.chrismdefinitions.premium </string>
+    <string name="premium_product_id_test_purchased">android.test.purchased</string>
+    <string name="premium_product_id_test_canceled">android.test.canceled</string>
+    <string name="premium_product_id_test_refunded">android.test.refunded</string>
     <string name="folder_name_dialog">Folder name:</string>
+    <string name="remove_ads">Remove ads</string>
 </resources>

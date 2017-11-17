@@ -3,45 +3,116 @@ package com.chrismsolutions.chrismdefinitions;
 import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.chrismsolutions.chrismdefinitions.billingUtil.IabHelper;
+import com.chrismsolutions.chrismdefinitions.billingUtil.IabResult;
+import com.chrismsolutions.chrismdefinitions.billingUtil.Inventory;
+import com.chrismsolutions.chrismdefinitions.billingUtil.Purchase;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+
+import java.io.Serializable;
 
 /**
  * Created by Christian Myrvold on 08.11.2017.
  */
 
-public class ChrismAdHelper
+public class ChrismAdHelper implements Serializable
 {
-    private static boolean TEST_UNIT = false;
+    private static final int REQUEST_CODE = 10001;
+    private static final String LOG_TAG = ChrismAdHelper.class.getName();
+    public static final String ADHELPER_CLASS = LOG_TAG;
+    private static boolean TEST_UNIT = true;
+    private Context mContext;
+    private IabHelper mHelper;
+    private boolean mCallback;
+    private boolean mHelperSetup = false;
+    private static String SKU_IN_APP_PURCHASE;
+    private boolean isPremiumUser = false;
+
+    public ChrismAdHelper(Context context, boolean initHelper, boolean callback)
+    {
+        mContext = context;
+        mCallback = callback;
+
+        if (isTestDevice())
+        {
+            SKU_IN_APP_PURCHASE = mContext.getString(R.string.premium_product_id_test_purchased);
+        }
+        else
+        {
+            SKU_IN_APP_PURCHASE = mContext.getString(R.string.premium_product_id);
+        }
+
+        if (initHelper)
+        {
+            mHelper = createIabHelper();
+        }
+    }
+
+    private IabHelper createIabHelper()
+    {
+        String base64EncodedPublicKey = SKU_IN_APP_PURCHASE;
+        mHelper = new IabHelper(mContext, base64EncodedPublicKey);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
+        {
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess())
+                {
+                    mHelperSetup = false;
+                    Log.e(LOG_TAG, "IabHelper not setup");
+                }
+                else
+                {
+                    mHelperSetup = true;
+                    try {
+                        mHelper.queryInventoryAsync(mInventoryListener);
+
+                    } catch (IabHelper.IabAsyncInProgressException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        return mHelper;
+    }
+
+    public static ChrismAdHelper createAdStatic(Context context,
+                                                RelativeLayout relativeLayout)
+    {
+        ChrismAdHelper adHelper = new ChrismAdHelper(context, false, false);
+        adHelper.createAd(relativeLayout);
+        return adHelper;
+    }
 
     /**
      * Load the ad programmatically. We have to do it this way if we want to be able to easily switch
      * out the unit ID to live ads or test ads.
-     * @param context
      * @param view
      */
-    public static void createAd(Context context, RelativeLayout view)
+    public void createAd(RelativeLayout view)
     {
-        boolean isWordCardActiviy = context.getClass() == WordCardActivity.class;
+        boolean isWordCardActiviy = mContext.getClass() == WordCardActivity.class;
 
-        if (showAd(context))
+        if (showAd())
         {
-            //AdView mAdView = (AdView) view;
-            AdView mAdView = new AdView(context);
+            AdView mAdView = new AdView(mContext);
             RelativeLayout.LayoutParams adParams = new
                     RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             TypedValue typedValue = new TypedValue();
-            if (!isWordCardActiviy && context.getTheme().resolveAttribute(R.attr.actionBarSize, typedValue, true))
+            if (!isWordCardActiviy && mContext.getTheme().resolveAttribute(R.attr.actionBarSize, typedValue, true))
             {
-                int marginTop =  TypedValue.complexToDimensionPixelSize(typedValue.data, context.getResources().getDisplayMetrics());
+                int marginTop =  TypedValue.complexToDimensionPixelSize(typedValue.data, mContext.getResources().getDisplayMetrics());
                 adParams.setMargins(0, marginTop, 0, 0);
             }
             adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
@@ -72,13 +143,13 @@ public class ChrismAdHelper
             AdRequest adRequest = new AdRequest.Builder().build();
 
             //Insert correct adUnitId depending on if this is a test unit
-            if (isTestDevice(context))
+            if (isTestDevice())
             {
-                mAdView.setAdUnitId(context.getString(R.string.adBannerUnitIdTest));
+                mAdView.setAdUnitId(mContext.getString(R.string.adBannerUnitIdTest));
             }
             else
             {
-                mAdView.setAdUnitId(context.getString(R.string.adBannerUnitId));
+                mAdView.setAdUnitId(mContext.getString(R.string.adBannerUnitId));
             }
 
             view.addView(mAdView);
@@ -92,14 +163,88 @@ public class ChrismAdHelper
      * payed. The check will be done against Google Payments.
      * @return true if the user has not payed to suppress ads, otherwise false
      */
-    public static boolean showAd(Context context)
+    public boolean showAd()
     {
-        return true;
+        return !isPremiumUser;
     }
 
-    public static boolean isTestDevice(Context context)
+    private IabHelper.QueryInventoryFinishedListener mInventoryListener =
+            new IabHelper.QueryInventoryFinishedListener() {
+                @Override
+                public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                    if (result.isFailure())
+                    {
+                        Log.d(LOG_TAG, "Error getting purchase result: " + result);
+                    }
+                    else
+                    {
+                        isPremiumUser = inv.hasPurchase(SKU_IN_APP_PURCHASE);
+                    }
+                    refreshCallingActivity();
+                }
+            };
+
+
+    private void refreshCallingActivity()
     {
-        return Boolean.valueOf(Settings.System.getString(context.getContentResolver(), "firebase.test.lab"))
+        if (!mCallback)
+        {
+            MainActivity mainActivity = (MainActivity) mContext;
+            mainActivity.changeDesign();
+        }
+    }
+
+    private boolean isTestDevice()
+    {
+        return Boolean.valueOf(Settings.System.getString(mContext.getContentResolver(), "firebase.test.lab"))
                 || TEST_UNIT;
+    }
+
+    private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener =
+            new IabHelper.OnIabPurchaseFinishedListener() {
+                @Override
+                public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                    if (result.isFailure())
+                    {
+                        Log.d(LOG_TAG, "Error purchasing: " + info);
+                    }
+                    else if (info.getSku().equals(SKU_IN_APP_PURCHASE))
+                    {
+                        isPremiumUser = true;
+                    }
+                    else
+                    {
+                        isPremiumUser = false;
+                    }
+                    refreshCallingActivity();
+                }
+            };
+
+    public IabHelper getIabHelper()
+    {
+        return mHelper;
+    }
+
+    public boolean removeAds()
+    {
+        boolean result = false;
+        if (mHelper != null)
+        {
+            MainActivity activity = (MainActivity)mContext;
+            try {
+                mHelper.launchPurchaseFlow(
+                        activity,
+                        SKU_IN_APP_PURCHASE,
+                        REQUEST_CODE,
+                        mPurchaseFinishedListener,
+                        "");
+                result = true;
+                mCallback = false;
+            } catch (IabHelper.IabAsyncInProgressException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 }

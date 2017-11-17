@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.chrismsolutions.chrismdefinitions.MainActivity">
+    tools:context="com.chrismsolutions.chrismdefinitions.WordCardActivity">
 
-    <item android:id="@+id/searchFolder"
+    <item android:id="@+id/searchFolderWordCards"
         android:icon="@mipmap/ic_search_white_24dp"
         android:title="@string/search_word"
         app:showAsAction="collapseActionView|ifRoom"
@@ -17,11 +18,4 @@
         android:visible="false"
         />
 
-    <item
-        android:id="@+id/remove_ads"
-        android:orderInCategory="101"
-        android:title="@string/remove_ads"
-        android:onClick="removeAds"
-        android:visible="false"
-        />
 </menu>
