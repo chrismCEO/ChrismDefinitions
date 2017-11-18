@@ -15,6 +15,7 @@ public final class DefinitionsContract
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_DEFINITIONS_FOLDER = "folders";
     public static final String PATH_DEFINITIONS_WORD_CARDS = "wordCards";
+    public static final String PATH_DEFINITIONS_SUGGESTIONS = "suggestions";
 
     private DefinitionsContract()
     {
@@ -38,6 +39,11 @@ public final class DefinitionsContract
         public static final String CONTENT_ITEM_TYPE_WORD_CARD =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DEFINITIONS_WORD_CARDS;
 
+        public static final Uri CONTENT_URI_SUGGESTION = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_DEFINITIONS_SUGGESTIONS);
+        public static final String CONTENT_LIST_TYPE_SUGGESTION =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DEFINITIONS_SUGGESTIONS;
+        public static final String CONTENT_ITEM_TYPE_SUGGESTION =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DEFINITIONS_SUGGESTIONS;
 
         //Folder table and column names
         public static final String TABLE_NAME_FOLDERS = "folders";

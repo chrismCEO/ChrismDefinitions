@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -24,6 +25,7 @@ import android.widget.RelativeLayout;
 
 import com.chrismsolutions.chrismdefinitions.billingUtil.IabHelper;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
+import com.chrismsolutions.chrismdefinitions.data.WordSuggestionDB;
 
 public class MainActivity extends AppCompatActivity
     implements LoaderManager.LoaderCallbacks<Cursor>
@@ -199,7 +201,7 @@ public class MainActivity extends AppCompatActivity
             removeAdMenuItem.setVisible(adHelper.showAd());
         }
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) menu.findItem(R.id.searchFolder).getActionView();
 
         //Include showAds
@@ -212,10 +214,86 @@ public class MainActivity extends AppCompatActivity
         searchView.setIconifiedByDefault(false);
         searchView.requestFocus();
 
-        //TODO: show suggestions
-        //searchView.setSuggestionsAdapter();
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                return true;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                Cursor cursor = searchView.getSuggestionsAdapter().getCursor();
+                cursor.moveToPosition(position);
+                String query = cursor.getString(1);
+                searchView.setQuery(query, true);
+                return true;
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                if (query.length() > 0)
+                {
+                    Intent searchIntent = new Intent(MainActivity.this, WordCardActivity.class);
+                    searchIntent.setAction(Intent.ACTION_SEARCH);
+                    searchIntent.putExtra(SearchManager.QUERY, query);
+                    startActivity(searchIntent);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                boolean show = false;
+                if (newText.length() >= 2)
+                {
+                    searchView.setSuggestionsAdapter(getSuggestionsAdapter(newText));
+                    show = true;
+                }
+                return show;
+            }
+        });
 
         return true;
+    }
+
+    private android.support.v4.widget.CursorAdapter getSuggestionsAdapter(String query)
+    {
+        String[] from = new String[]
+            {
+                    WordSuggestionDB.KEY_WORD,
+                    WordSuggestionDB.KEY_DEFINITION
+            };
+
+        int[] to = new int[]
+            {
+                    R.id.word,
+                    R.id.definition
+            };
+
+        String[] selectionArgs = new String[]{query};
+
+        Cursor cursor = getContentResolver().query(
+                DefinitionsEntry.CONTENT_URI_SUGGESTION,
+                from,
+                null,
+                selectionArgs,
+                null);
+
+        android.support.v4.widget.CursorAdapter adapter = new android.support.v4.widget.SimpleCursorAdapter(
+                this,
+                R.layout.suggestion,
+                cursor,
+                from,
+                to,
+                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
+        );
+
+        return adapter;
     }
 
     @Override

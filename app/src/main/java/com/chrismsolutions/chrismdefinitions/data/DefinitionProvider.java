@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -37,8 +38,12 @@ public class DefinitionProvider extends ContentProvider
     private static final int WORD_CARD_ITEMS = 200;
     private static final int WORD_CARD_ITEM_ID = 201;
 
+    private static final int SUGGEST_URI_PATH_QUERY =300;
+    private static final int SUGGEST_URI_PATH_QUERY_ID = 301;
+
     private static final String FOLDERS = "folders";
     private static final String WORD_CARDS = "wordCards";
+    private static final String SUGGESTIONS = "suggestions";
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -49,6 +54,9 @@ public class DefinitionProvider extends ContentProvider
 
         sUriMatcher.addURI(DefinitionsContract.CONTENT_AUTHORITY, DefinitionsContract.PATH_DEFINITIONS_WORD_CARDS, WORD_CARD_ITEMS);
         sUriMatcher.addURI(DefinitionsContract.CONTENT_AUTHORITY, DefinitionsContract.PATH_DEFINITIONS_WORD_CARDS + "/#", WORD_CARD_ITEM_ID);
+
+        sUriMatcher.addURI(DefinitionsContract.CONTENT_AUTHORITY, DefinitionsContract.PATH_DEFINITIONS_SUGGESTIONS, SUGGEST_URI_PATH_QUERY);
+        sUriMatcher.addURI(DefinitionsContract.CONTENT_AUTHORITY, DefinitionsContract.PATH_DEFINITIONS_SUGGESTIONS + "/#", SUGGEST_URI_PATH_QUERY_ID);
     }
 
 
@@ -73,11 +81,13 @@ public class DefinitionProvider extends ContentProvider
     }
 
     private Uri uriGlobal;
+    private WordSuggestionDB mDictionary;
 
     @Override
     public boolean onCreate()
     {
         mDBHelper = new DefinitionDBHelper(getContext());
+        mDictionary = new WordSuggestionDB(getContext());
         return true;
     }
 
@@ -99,7 +109,7 @@ public class DefinitionProvider extends ContentProvider
                         @Nullable String sortOrder)
     {
         SQLiteQueryBuilder database = new SQLiteQueryBuilder();
-        Cursor cursor = null;
+        Cursor cursor = null, suggestionCursor = null;
         int match = sUriMatcher.match(uri);
         String type = "";
         boolean skipQuery = false;
@@ -169,12 +179,19 @@ public class DefinitionProvider extends ContentProvider
                 type = WORD_CARDS;
                 break;
 
+            case SUGGEST_URI_PATH_QUERY:
+            case SUGGEST_URI_PATH_QUERY_ID:
+                suggestionCursor = getSuggestions(selectionArgs[0]);
+                //database.setProjectionMap(sWordCardProjectionMap);
+                type = SUGGESTIONS;
+                break;
+
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
 
         //set the order by
-        if (TextUtils.isEmpty(sortOrder))
+        if (TextUtils.isEmpty(sortOrder) && type != SUGGESTIONS)
         {
             switch (type)
             {
@@ -191,7 +208,13 @@ public class DefinitionProvider extends ContentProvider
             }
         }
 
-        cursor = database.query(
+        if (type == SUGGESTIONS)
+        {
+            cursor = suggestionCursor;
+        }
+        else
+        {
+            cursor = database.query(
                     mDBHelper.getReadableDatabase(),
                     projection,
                     selection,
@@ -199,11 +222,23 @@ public class DefinitionProvider extends ContentProvider
                     null,
                     null,
                     sortOrder);
-
-
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }
 
         return cursor;
+    }
+
+    private Cursor getSuggestions(String query)
+    {
+        query = query.toLowerCase();
+        String[] projections = new String[]
+            {
+                    BaseColumns._ID,
+                    WordSuggestionDB.KEY_WORD,
+                    WordSuggestionDB.KEY_DEFINITION
+            };
+
+        return mDictionary.getWordMatches(query, projections);
     }
 
     @Nullable
@@ -224,6 +259,11 @@ public class DefinitionProvider extends ContentProvider
             case WORD_CARD_ITEMS:
             case WORD_CARD_ITEM_ID:
                 type = DefinitionsEntry.CONTENT_ITEM_TYPE_WORD_CARD;
+                break;
+
+            case SUGGEST_URI_PATH_QUERY:
+            case SUGGEST_URI_PATH_QUERY_ID:
+                type = DefinitionsEntry.CONTENT_LIST_TYPE_SUGGESTION;
                 break;
 
             default:

@@ -157,16 +157,15 @@ public class WordCardActivity extends AppCompatActivity
         listViewWordCards.setAdapter(wordCardAdapter);
 
         listViewWordCards.setEmptyView(findViewById(R.id.empty_view_word_cards));
-        
-        getLoaderManager().initLoader(LOADER_ID, null, this);
 
         //Ad management
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relative_layout_word_cards);
         if (showAds)
         {
-             adHelper  = ChrismAdHelper.createAdStatic(this, relativeLayout);
+            adHelper  = ChrismAdHelper.createAdStatic(this, relativeLayout);
         }
 
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     /**
@@ -340,7 +339,7 @@ public class WordCardActivity extends AppCompatActivity
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_word_card, menu);
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.searchFolderWordCards).getActionView();
 
 
@@ -355,7 +354,34 @@ public class WordCardActivity extends AppCompatActivity
         searchView.setIconifiedByDefault(false);
         searchView.requestFocus();
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() >= 2)
+                {
+                    searchNewQuery(newText);
+                }
+                else if (newText.length() == 0)
+                {
+                    searchNewQuery("");
+                }
+                return true;
+            }
+        });
+
         return true;
+    }
+
+    private void searchNewQuery(String newText)
+    {
+        nameQuery = newText;
+        readWordCardDataFromDB();
+        wordCardAdapter.setNewItems(listDataHeader, listDataChild, listDataChildIds);
     }
 
     @Override

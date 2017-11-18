@@ -27,7 +27,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/round_logo"
+            android:src="@mipmap/word_cards_icon_android"
             android:layout_gravity="center_horizontal"
             />
 
