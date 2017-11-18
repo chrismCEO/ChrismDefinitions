@@ -179,6 +179,11 @@ public class ChrismAdHelper implements Serializable
                     else
                     {
                         isPremiumUser = inv.hasPurchase(SKU_IN_APP_PURCHASE);
+                        /*try {
+                            mHelper.consumeAsync(inv.getPurchase(SKU_IN_APP_PURCHASE), null);
+                        } catch (IabHelper.IabAsyncInProgressException e) {
+                            e.printStackTrace();
+                        }*/
                     }
                     refreshCallingActivity();
                 }

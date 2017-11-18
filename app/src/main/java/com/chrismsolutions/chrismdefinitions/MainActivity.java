@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         //Show ads if user has not payed to suppress them
         if (getIntent() != null && getIntent().hasExtra(MainActivity.IS_PREMIUM_USER))
         {
-            showAds = !getIntent().getBooleanExtra(MainActivity.IS_PREMIUM_USER, false);
+            showAds = !getIntent().getBooleanExtra(MainActivity.IS_PREMIUM_USER, true);
             if (showAds)
             {
                 adHelper = new ChrismAdHelper(this, true, true);
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity
         if (showAds)
         {
             MenuItem removeAdMenuItem = (MenuItem) menu.findItem(R.id.remove_ads);
-            //removeAdMenuItem.setVisible(adHelper.showAd());
+            removeAdMenuItem.setVisible(adHelper.showAd());
         }
 
         final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity
                     Intent searchIntent = new Intent(MainActivity.this, WordCardActivity.class);
                     searchIntent.setAction(Intent.ACTION_SEARCH);
                     searchIntent.putExtra(SearchManager.QUERY, query);
+                    searchIntent.putExtra(MainActivity.IS_PREMIUM_USER, !showAds);
                     startActivity(searchIntent);
                 }
                 return true;
