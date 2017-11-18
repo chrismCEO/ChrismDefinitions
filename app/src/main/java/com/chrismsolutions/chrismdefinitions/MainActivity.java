@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity
         if (showAds)
         {
             MenuItem removeAdMenuItem = (MenuItem) menu.findItem(R.id.remove_ads);
-            removeAdMenuItem.setVisible(adHelper.showAd());
+            //removeAdMenuItem.setVisible(adHelper.showAd());
         }
 
         final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
