@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.chrismsolutions.chrismdefinitions.billingUtil.IabHelper;
@@ -66,19 +65,6 @@ public class MainActivity extends AppCompatActivity
         {
             setContentView(R.layout.activity_main);
         }
-        //adHelper = new ChrismAdHelper(this, true);
-        /*showAds = adHelper.showAd();
-        if (showAds)
-        {
-            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relative_layout_main);
-            adHelper.createAd(relativeLayout);
-        }
-        else
-        {
-            setContentView(R.layout.activity_main);
-        }
-
-        setContentView(R.layout.activity_main);*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -355,6 +341,7 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
         if (adHelper != null)
         {
+
             IabHelper mHelper = adHelper.getIabHelper();
             if (mHelper != null) {
                 try {
@@ -370,18 +357,5 @@ public class MainActivity extends AppCompatActivity
     public void removeAds(MenuItem item)
     {
         adHelper.removeAds();
-    }
-
-    public void showSpinner(boolean show)
-    {
-        ProgressBar spinner = (ProgressBar) findViewById(R.id.wait);
-        if (show)
-        {
-            spinner.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            spinner.setVisibility(View.GONE);
-        }
     }
 }

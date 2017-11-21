@@ -58,7 +58,7 @@ public class ChrismAdHelper implements Serializable
 
     private IabHelper createIabHelper()
     {
-        String base64EncodedPublicKey = SKU_IN_APP_PURCHASE;
+        String base64EncodedPublicKey = mContext.getResources().getString(R.string.billing_encoded_public_key);
         mHelper = new IabHelper(mContext, base64EncodedPublicKey);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
         {
