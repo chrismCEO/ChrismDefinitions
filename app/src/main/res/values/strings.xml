@@ -10,7 +10,7 @@
     <string name="ok_dialog">OK</string>
     <string name="cancel_dialog">Cancel</string>
     <string name="word_name_hint">Word name</string>
-    <string name="word_definition_hint">Word definition</string>
+    <string name="word_definition_hint">Definition</string>
     <string name="search_word">Search word</string>
     <string name="search_result_title">Search result: \"<xliff:g id="title">%s</xliff:g>\"</string>
     <string name="delete_folder">Delete folder \"<xliff:g id="folderName">%s</xliff:g>\"?</string>

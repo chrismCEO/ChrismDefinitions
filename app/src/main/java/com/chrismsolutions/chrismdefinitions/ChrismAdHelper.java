@@ -28,7 +28,7 @@ public class ChrismAdHelper implements Serializable
     private static final int REQUEST_CODE = 10001;
     private static final String LOG_TAG = ChrismAdHelper.class.getName();
     public static final String ADHELPER_CLASS = LOG_TAG;
-    private static boolean TEST_UNIT = false;
+    private static boolean TEST_UNIT = true;
     private Context mContext;
     private IabHelper mHelper;
     private boolean mCallback;
