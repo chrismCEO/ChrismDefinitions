@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="4dp"
+    >
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:layout_height="match_parent"
+        android:text="Word name"
+        android:id="@+id/result_word_name"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:text="75%"
+        android:id="@+id/result_percentage_total"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:text="100%"
+        android:id="@+id/result_percentage_last"
+        android:gravity="center_vertical"
+        />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_sentiment_satisfied_white_48dp"
+        android:id="@+id/result_smiley"
+        />
+
+</LinearLayout>

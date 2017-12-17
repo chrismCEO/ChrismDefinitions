@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chrismsolutions.chrismdefinitions">
 
-    <!-- Internet permission needed for ads -->
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
@@ -19,8 +18,10 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".WordCardActivity" />
@@ -31,8 +32,10 @@
             android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -44,15 +47,32 @@
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <activity
+            android:name=".WordCardFlipActivity"
+            android:label="@string/test_activity_title">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CreateTestActivity" />
+        </activity>
+        <activity
+            android:name=".CreateTestActivity"
+            android:label="@string/create_test_header">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <provider
-            android:authorities="com.chrismsolutions.chrismdefinitions"
             android:name=".data.DefinitionProvider"
+            android:authorities="com.chrismsolutions.chrismdefinitions"
             android:exported="false" />
+
+        <activity android:name=".FinishTestActivity"
+            android:label="@string/test_result"/>
     </application>
 
 </manifest>

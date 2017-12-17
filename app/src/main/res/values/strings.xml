@@ -34,4 +34,25 @@
     <string name="premium_product_id_test_refunded">android.test.refunded</string>
     <string name="folder_name_dialog">Folder name:</string>
     <string name="remove_ads">Remove ads</string>
+    <string name="word_name_card">Word name</string>
+    <string name="word_definition_card">Word definition</string>
+    <string name="menu_create_test">Test yourself</string>
+    <string name="failure_content_desc">Press to acknowledge failure</string>
+    <string name="success_content_desc">Press to acknowledge correctness</string>
+    <string name="create_test_header">Create Test</string>
+    <string name="choose_folder_test">Choose folder(s)</string>
+    <string name="start_test">Start test</string>
+    <string name="create_test_number_start">Create test with </string>
+    <string name="create_test_number_middle"> out of a total of </string>
+    <string name="number_larger_than_available">Cannot choose more than available</string>
+    <string name="folder_checked_check">Choose at least 1 folder</string>
+    <string name="choose_number_words_check">Choose how many words you wish to draw</string>
+    <string name="test_activity_title">Test</string>
+    <string name="percentage"><xliff:g id="percentage">%s%%</xliff:g></string>
+    <string name="test_result">Test result</string>
+    <string name="new_test_btn">New test!</string>
+    <string name="home_btn">Home</string>
+    <string name="word">Word</string>
+    <string name="percent_total">\u0025 total</string>
+    <string name="percentage_last_5">\u0025 last 5</string>
 </resources>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.chrismsolutions.chrismdefinitions.FinishTestActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:drawableTop="@mipmap/ic_sentiment_satisfied_white_48dp"
+        android:drawableTint="@color/colorSecondaryText"
+        android:text="100%"
+        android:textSize="32sp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:id="@+id/result"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:text="@string/word"
+            android:id="@+id/result_word_name"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="@string/percent_total"
+            android:id="@+id/result_percentage_total"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="@string/percentage_last_5"
+            android:id="@+id/result_percentage_last"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:id="@+id/list_words_result"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/new_test_btn"
+            android:background="@color/colorAccent"
+            android:layout_margin="4dp"
+            android:onClick="btnRestartTest"
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/home_btn"
+            android:background="@color/colorAccent"
+            android:layout_margin="4dp"
+            android:onClick="btnHome"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

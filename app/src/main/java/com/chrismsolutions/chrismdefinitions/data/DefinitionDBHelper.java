@@ -12,7 +12,7 @@ import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.Definition
 public class DefinitionDBHelper extends SQLiteOpenHelper
 {
     private static final String DB_NAME = "definitions.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     private static final String SQL_CREATE_FOLDER_TABLE =
             "CREATE TABLE " + DefinitionsEntry.TABLE_NAME_FOLDERS + " ("
@@ -23,12 +23,38 @@ public class DefinitionDBHelper extends SQLiteOpenHelper
             "CREATE TABLE " + DefinitionsEntry.TABLE_NAME_WORD_CARDS + " ("
             + DefinitionsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + DefinitionsEntry.COLUMN_WORD_CARD_NAME + " TEXT NOT NULL, "
-            + DefinitionsEntry.COLUMN_WORD_CARD_TEXT + " TEXT NOT NULL);";
+            + DefinitionsEntry.COLUMN_WORD_CARD_TEXT + " TEXT NOT NULL, "
+            + DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_TOTAL + " INT DEFAULT 0, "
+            + DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_LAST + " INT DEFAULT 0, "
+            + DefinitionsEntry.COLUMN_WORD_CARD_WRONG_TOTAL + " INT DEFAULT 0, "
+            + DefinitionsEntry.COLUMN_WORD_CARD_WRONG_LAST + " INT DEFAULT 0);";
 
     private static final String SQL_CREATE_LINK_TABLE =
             "CREATE TABLE " + DefinitionsEntry.TABLE_NAME_LINK + " ("
             + DefinitionsEntry.COLUMN_LINK_FOLDER_ID + " INT NOT NULL, "
             + DefinitionsEntry.COLUMN_LINK_WORD_CARD_ID + " INT NOT NULL); ";
+
+    //DB_VERSION = 2
+    private static final String SQL_ALTER_TABLE_WORD_CARD_CORRECT_TOTAL =
+            "ALTER TABLE " +
+            DefinitionsEntry.TABLE_NAME_WORD_CARDS +
+            " ADD COLUMN " + DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_TOTAL + " INTEGER DEFAULT 0;";
+
+    private static final String SQL_ALTER_TABLE_WORD_CARD_CORRECT_LAST =
+            "ALTER TABLE " +
+            DefinitionsEntry.TABLE_NAME_WORD_CARDS +
+            " ADD COLUMN " + DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_LAST + " INTEGER DEFAULT 0;";
+
+    private static final String SQL_ALTER_TABLE_WORD_CARD_WRONG_TOTAL =
+            "ALTER TABLE " +
+            DefinitionsEntry.TABLE_NAME_WORD_CARDS +
+            " ADD COLUMN " + DefinitionsEntry.COLUMN_WORD_CARD_WRONG_TOTAL + " INTEGER DEFAULT 0;";
+
+    private static final String SQL_ALTER_TABLE_WORD_CARD_WRONG_LAST =
+            "ALTER TABLE " +
+            DefinitionsEntry.TABLE_NAME_WORD_CARDS +
+            " ADD COLUMN " + DefinitionsEntry.COLUMN_WORD_CARD_WRONG_LAST + " INTEGER DEFAULT 0;";
+
 
     public DefinitionDBHelper(Context context)
     {
@@ -46,7 +72,13 @@ public class DefinitionDBHelper extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        //This code will be filled in when new Columns or Tables are added
-
+        //DB_VERSION = 2 (statistics fields added)
+        if (oldVersion < 2)
+        {
+            db.execSQL(SQL_ALTER_TABLE_WORD_CARD_CORRECT_TOTAL);
+            db.execSQL(SQL_ALTER_TABLE_WORD_CARD_CORRECT_LAST);
+            db.execSQL(SQL_ALTER_TABLE_WORD_CARD_WRONG_TOTAL);
+            db.execSQL(SQL_ALTER_TABLE_WORD_CARD_WRONG_LAST);
+        }
     }
 }

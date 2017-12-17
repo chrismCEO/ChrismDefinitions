@@ -134,6 +134,31 @@ public class DefinitionProvider extends ContentProvider
                 break;
 
             case WORD_CARD_ITEMS:
+                if (selectionArgs != null)
+                {
+                    if (selection == null)
+                    {
+                        selection = DefinitionsEntry.TABLE_NAME_LINK + "."
+                                + DefinitionsEntry.COLUMN_LINK_FOLDER_ID + SQL_JOKER_ID;
+                    }
+
+                    if (selectionArgs.length > 1)
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(DefinitionsEntry.TABLE_NAME_LINK + "." +
+                                DefinitionsEntry.COLUMN_LINK_FOLDER_ID + " IN(?");
+
+                        for (int i = 1; i < selectionArgs.length; i++)
+                        {
+                            builder.append(",?");
+                        }
+
+                        builder.append(")");
+                        selection = builder.toString();
+                    }
+
+                }
+
                 //We need a join with the Link table based on the folder ID
                 database.setTables(DefinitionsEntry.TABLE_NAME_WORD_CARDS +
                         " LEFT OUTER JOIN " + DefinitionsEntry.TABLE_NAME_LINK + " ON " +
@@ -208,7 +233,7 @@ public class DefinitionProvider extends ContentProvider
             }
         }
 
-        if (type == SUGGESTIONS)
+        if (type.equals(SUGGESTIONS))
         {
             cursor = suggestionCursor;
         }
@@ -657,25 +682,30 @@ public class DefinitionProvider extends ContentProvider
     private boolean checkWordCardValues(ContentValues values)
     {
         boolean ok = true;
-        String wordCardName = values.getAsString(DefinitionsEntry.COLUMN_WORD_CARD_NAME);
-        String wordCardDef = values.getAsString(DefinitionsEntry.COLUMN_WORD_CARD_TEXT);
-
-        if (TextUtils.isEmpty(wordCardName))
+        if (values.containsKey(DefinitionsEntry.COLUMN_WORD_CARD_NAME))
         {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.empty_word_card_name_check),
-                    Toast.LENGTH_SHORT).show();
-            ok = false;
+            String wordCardName = values.getAsString(DefinitionsEntry.COLUMN_WORD_CARD_NAME);
+            if (TextUtils.isEmpty(wordCardName))
+            {
+                Toast.makeText(
+                        getContext(),
+                        getContext().getString(R.string.empty_word_card_name_check),
+                        Toast.LENGTH_SHORT).show();
+                ok = false;
+            }
         }
 
-        if (TextUtils.isEmpty(wordCardDef))
+        if (values.containsKey(DefinitionsEntry.COLUMN_WORD_CARD_TEXT))
         {
-            Toast.makeText(
-                    getContext(),
-                    getContext().getString(R.string.empty_word_card_text_check),
-                    Toast.LENGTH_SHORT).show();
-            ok = false;
+            String wordCardDef = values.getAsString(DefinitionsEntry.COLUMN_WORD_CARD_TEXT);
+            if (TextUtils.isEmpty(wordCardDef))
+            {
+                Toast.makeText(
+                        getContext(),
+                        getContext().getString(R.string.empty_word_card_text_check),
+                        Toast.LENGTH_SHORT).show();
+                ok = false;
+            }
         }
         return ok;
     }

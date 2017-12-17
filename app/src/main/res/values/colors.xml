@@ -8,4 +8,7 @@
     <color name="colorSecondaryText">#757575</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="success_green">#27e833</color>
+    <color name="fail_red">#f9152f</color>
+    <color name="suspend">#D3D3D3</color>
 </resources>

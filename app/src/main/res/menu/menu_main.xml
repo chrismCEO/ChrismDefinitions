@@ -18,8 +18,15 @@
         />
 
     <item
-        android:id="@+id/remove_ads"
+        android:id="@+id/action_create_test"
         android:orderInCategory="101"
+        android:title="@string/menu_create_test"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/remove_ads"
+        android:orderInCategory="102"
         android:title="@string/remove_ads"
         android:onClick="removeAds"
         android:visible="false"

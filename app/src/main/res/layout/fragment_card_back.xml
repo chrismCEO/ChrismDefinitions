@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:minHeight="250dp"
+    android:id="@+id/containerBack"
+    app:cardPreventCornerOverlap="false"
+    app:cardElevation="0dp"
+    app:cardUseCompatPadding="true"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            style="?android:textAppearanceMedium"
+            android:text="@string/word_definition_card"
+            android:gravity="center_horizontal|center_vertical"
+            android:id="@+id/word_definition_card"
+            android:textColor="@color/colorSecondaryText"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_highlight_off_white_48dp"
+                android:tint="@color/fail_red"
+                android:id="@+id/card_wrong_definition"
+                android:contentDescription="@string/failure_content_desc" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_done_white_48dp"
+                android:tint="@color/success_green"
+                android:id="@+id/card_correct_definition"
+                android:contentDescription="@string/success_content_desc"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

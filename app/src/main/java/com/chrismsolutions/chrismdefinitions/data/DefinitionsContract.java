@@ -53,6 +53,10 @@ public final class DefinitionsContract
         public static final String TABLE_NAME_WORD_CARDS = "wordCards";
         public static final String COLUMN_WORD_CARD_NAME = "name";
         public static final String COLUMN_WORD_CARD_TEXT = "text";
+        public static final String COLUMN_WORD_CARD_CORRECT_TOTAL = "correct_total";
+        public static final String COLUMN_WORD_CARD_WRONG_TOTAL = "wrong_total";
+        public static final String COLUMN_WORD_CARD_CORRECT_LAST = "correct_last";
+        public static final String COLUMN_WORD_CARD_WRONG_LAST = "wrong_last";
 
         //Link table and column names
         public static final String TABLE_NAME_LINK = "links";

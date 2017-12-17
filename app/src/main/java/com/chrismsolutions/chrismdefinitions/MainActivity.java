@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 
 import com.chrismsolutions.chrismdefinitions.billingUtil.IabHelper;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
+import com.chrismsolutions.chrismdefinitions.data.TestDB;
 import com.chrismsolutions.chrismdefinitions.data.WordSuggestionDB;
 
 public class MainActivity extends AppCompatActivity
@@ -292,12 +293,20 @@ public class MainActivity extends AppCompatActivity
         boolean result = false;
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if (id == R.id.remove_ads)
+        switch (id)
         {
-            result = adHelper.removeAds();
+            case R.id.action_settings:
+                result = true;
+                break;
+
+            case R.id.remove_ads:
+                result = adHelper.removeAds();
+                break;
+
+            case R.id.action_create_test:
+                Intent intent = new Intent(MainActivity.this, CreateTestActivity.class);
+                startActivity(intent);
+                break;
         }
 
         return super.onOptionsItemSelected(item) && result;
