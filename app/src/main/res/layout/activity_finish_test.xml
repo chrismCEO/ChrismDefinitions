@@ -69,6 +69,7 @@
         android:layout_height="0dp"
         android:layout_weight="6"
         android:id="@+id/list_words_result"
+        android:layout_margin="4dp"
         />
 
     <LinearLayout

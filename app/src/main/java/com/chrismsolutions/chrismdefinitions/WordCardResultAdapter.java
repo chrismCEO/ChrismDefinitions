@@ -33,7 +33,7 @@ public class WordCardResultAdapter extends CursorAdapter
     @Override
     public void bindView(View view, Context context, Cursor cursor)
     {
-        TextView wordName = (TextView) view.findViewById(R.id.result_word_name);
+        TextView wordName = view.findViewById(R.id.result_word_name);
         wordName.setText(cursor.getString(cursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_NAME)));
 
         int correctTotal = cursor.getInt(cursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_TOTAL));
@@ -47,13 +47,13 @@ public class WordCardResultAdapter extends CursorAdapter
         double percentageLast = ((double) correctLast / (double) totalLast);
         int percentageLastInt = (int) (percentageLast * 100);
 
-        TextView percentageTotalView = (TextView) view.findViewById(R.id.result_percentage_total);
+        TextView percentageTotalView = view.findViewById(R.id.result_percentage_total);
         percentageTotalView.setText(context.getString(R.string.percentage, String.valueOf(percentageTotalInt)));
 
-        TextView percentageLastView = (TextView) view.findViewById(R.id.result_percentage_last);
+        TextView percentageLastView = view.findViewById(R.id.result_percentage_last);
         percentageLastView.setText(context.getString(R.string.percentage, String.valueOf(percentageLastInt)));
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.result_smiley);
+        ImageView imageView = view.findViewById(R.id.result_smiley);
 
         imageView.setImageResource(FinishTestActivity.setDrawableTopResult(percentageLastInt));
         imageView.setColorFilter(R.color.colorSecondaryText);

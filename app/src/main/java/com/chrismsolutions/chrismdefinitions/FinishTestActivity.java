@@ -3,6 +3,7 @@ package com.chrismsolutions.chrismdefinitions;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.chrismsolutions.chrismdefinitions.data.DefinitionDBHelper;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionProvider;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
 
@@ -86,7 +88,7 @@ public class FinishTestActivity extends AppCompatActivity
 
         resultAdapter = new WordCardResultAdapter(FinishTestActivity.this, queryWordCardsFromDB(ids));
 
-        ListView listView = (ListView) findViewById(R.id.list_words_result);
+        ListView listView = findViewById(R.id.list_words_result);
         listView.setAdapter(resultAdapter);
     }
 
@@ -132,17 +134,28 @@ public class FinishTestActivity extends AppCompatActivity
         };
 
         String[] selectionArgs = new String[ids.size()];
+        StringBuilder builder = new StringBuilder();
+        builder.append(DefinitionsEntry._ID + " IN(?");
 
         for (int i = 0; i < ids.size(); i++)
         {
             selectionArgs[i] = String.valueOf(ids.get(i));
+            builder.append(",?");
         }
+        builder.append(")");
+        String selection = builder.toString();
 
-        return getContentResolver().query(
-                DefinitionsEntry.CONTENT_URI_WORD_CARD,
+
+        DefinitionDBHelper dbHelper = new DefinitionDBHelper(FinishTestActivity.this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        return db.query(
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS,
                 projection,
-                null,
+                selection,
                 selectionArgs,
+                null,
+                null,
                 null);
     }
 

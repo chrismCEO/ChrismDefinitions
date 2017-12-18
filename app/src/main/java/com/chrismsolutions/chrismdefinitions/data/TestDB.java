@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
 
+import java.util.ArrayList;
+
 /**
  * Created by Christian Myrvold on 29.10.2017.
  */
@@ -176,5 +178,64 @@ public class TestDB
             Log.i(LOG_TAG, "-------------------------------");
         }
         cursorWordsSearch.close();
+
+        Log.i(LOG_TAG, "QUERY WITH STATISTICS");
+
+        String[] projectionStat = {
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS + "." + DefinitionsEntry._ID,
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS + "." + DefinitionsEntry.COLUMN_WORD_CARD_NAME,
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS + "." + DefinitionsEntry.COLUMN_WORD_CARD_TEXT,
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS + "." + DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_TOTAL,
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS + "." + DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_LAST,
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS + "." + DefinitionsEntry.COLUMN_WORD_CARD_WRONG_TOTAL,
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS + "." + DefinitionsEntry.COLUMN_WORD_CARD_WRONG_LAST
+        };
+
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(1);
+        ids.add(2);
+        ids.add(3);
+        ids.add(4);
+
+        //String selectionStat = DefinitionsEntry._ID + SQL_JOKER_ID;
+        String[] selectionArgsStat = new String[ids.size()];
+
+        for (int i = 0; i < ids.size(); i++)
+        {
+            selectionArgsStat[i] = String.valueOf(ids.get(i));
+        }
+
+        selection = "";
+        if (selectionArgsStat.length > 1) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(DefinitionsEntry._ID + " IN(?");
+
+            for (int i = 1; i < selectionArgsStat.length; i++) {
+                builder.append(",?");
+            }
+
+            builder.append(")");
+            selection = builder.toString();
+        }
+
+        Cursor cursorStat = database.query(
+                DefinitionsEntry.TABLE_NAME_WORD_CARDS,
+                projectionStat,
+                selection,
+                selectionArgsStat,
+                null,
+                null,
+                null);
+
+        while (cursorStat.moveToNext())
+        {
+            Log.i(LOG_TAG, cursorStat.getString(cursorStat.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_NAME)));
+            Log.i(LOG_TAG, String.valueOf(cursorStat.getInt(cursorStat.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_TOTAL))));
+            Log.i(LOG_TAG, String.valueOf(cursorStat.getInt(cursorStat.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_LAST))));
+            Log.i(LOG_TAG, String.valueOf(cursorStat.getInt(cursorStat.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_WRONG_TOTAL))));
+            Log.i(LOG_TAG, String.valueOf(cursorStat.getInt(cursorStat.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_WRONG_LAST))));
+            Log.i(LOG_TAG, "-------------------------------");
+        }
+        cursorStat.close();
     }
 }
