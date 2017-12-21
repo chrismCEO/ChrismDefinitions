@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.action_create_test:
                 Intent intent = new Intent(MainActivity.this, CreateTestActivity.class);
-                intent.putExtra(IS_PREMIUM_USER, !adHelper.showAd());
+                intent.putExtra(IS_PREMIUM_USER, adHelper == null ? !showAds : !adHelper.showAd());
                 startActivity(intent);
                 break;
         }
@@ -351,7 +351,6 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
         if (adHelper != null)
         {
-
             IabHelper mHelper = adHelper.getIabHelper();
             if (mHelper != null) {
                 try {
