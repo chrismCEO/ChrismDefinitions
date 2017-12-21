@@ -22,11 +22,12 @@ import java.util.ArrayList;
 
 public class CreateTestActivity extends AppCompatActivity
 {
-    CreateTestFolderCursorAdapter adapter;
-    ArrayList<Folder> folders;
-    int numberAvailable;
-    TextView numberAvailableTextView;
-    EditText numberChooser;
+    private CreateTestFolderCursorAdapter adapter;
+    private ArrayList<Folder> folders;
+    private int numberAvailable;
+    private TextView numberAvailableTextView;
+    private EditText numberChooser;
+    private boolean showAds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +42,12 @@ public class CreateTestActivity extends AppCompatActivity
         numberAvailableTextView = (TextView)findViewById(R.id.create_test_total_words);
         String numAvailString = " " + numberAvailable;
         numberAvailableTextView.setText(numAvailString);
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(MainActivity.IS_PREMIUM_USER))
+        {
+            showAds = !intent.getBooleanExtra(MainActivity.IS_PREMIUM_USER, true);
+        }
 
         numberChooser.addTextChangedListener(new TextWatcher() {
             @Override
@@ -204,6 +211,7 @@ public class CreateTestActivity extends AppCompatActivity
             bundle.putIntegerArrayList(WordCardFlipActivity.INTENT_ADAPTER, ids);
             intent.putExtras(bundle);
             intent.putExtra(WordCardFlipActivity.INTENT_WORD_DRAW, Integer.parseInt(numberChooser.getText().toString()));
+            intent.putExtra(MainActivity.IS_PREMIUM_USER, !showAds);
             startActivity(intent);
         }
     }

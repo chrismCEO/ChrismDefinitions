@@ -76,10 +76,7 @@ public class WordCardActivity extends AppCompatActivity
             setContentView(R.layout.activity_word_card);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
-        FloatingActionButton fabWordCard = (FloatingActionButton) findViewById(R.id.fabWordCard);
+        FloatingActionButton fabWordCard = findViewById(R.id.fabWordCard);
         fabWordCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,13 +150,13 @@ public class WordCardActivity extends AppCompatActivity
                 listDataChild,
                 listDataChildIds,
                 getFolderId());
-        ExpandableListView listViewWordCards = (ExpandableListView)findViewById(R.id.wordCardList);
+        ExpandableListView listViewWordCards = findViewById(R.id.wordCardList);
         listViewWordCards.setAdapter(wordCardAdapter);
 
         listViewWordCards.setEmptyView(findViewById(R.id.empty_view_word_cards));
 
         //Ad management
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relative_layout_word_cards);
+        RelativeLayout relativeLayout = findViewById(R.id.relative_layout_word_cards);
         if (showAds)
         {
             adHelper  = ChrismAdHelper.createAdStatic(this, relativeLayout);

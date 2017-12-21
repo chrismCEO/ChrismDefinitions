@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.chrismsolutions.chrismdefinitions.data.DefinitionProvider;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
@@ -26,6 +27,8 @@ public class WordCardFlipActivity extends AppCompatActivity
     WordCardArrayAdapter adapter;
     int highestId = 0;
     int correctResultTotal, wrongResultTotal;
+    boolean showAds;
+    ChrismAdHelper adHelper;
 
     public static final String INTENT_ADAPTER = "INTENT_ADAPTER";
     public static final String INTENT_WORD_DRAW = "INTENT_WORD_DRAW";
@@ -34,17 +37,23 @@ public class WordCardFlipActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        //Ad management
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(MainActivity.IS_PREMIUM_USER))
+        {
+            showAds = !intent.getBooleanExtra(MainActivity.IS_PREMIUM_USER, true);
+        }
+
         setContentView(R.layout.activity_word_card_flip);
 
-        //RecyclerView recyclerView = (RecyclerView) findViewById(R.id.word_card_flip_recycler_view);
-        //We will always know how many cards we will create
-        //recyclerView.setHasFixedSize(true);
-        ListView listView = (ListView) findViewById(R.id.list_cards);
+        RelativeLayout relativeLayout = findViewById(R.id.card_flip_container);
+        if (showAds)
+        {
+            adHelper  = ChrismAdHelper.createAdStatic(this, relativeLayout);
+        }
 
-        //LinearLayoutManager manager = new LinearLayoutManager(WordCardFlipActivity.this);
-        //recyclerView.setLayoutManager(manager);
-
-        if (getIntent() != null)// && getIntent().hasExtra(INTENT_WORD_DRAW))
+        if (getIntent() != null)
         {
             Intent callerIntent = getIntent();
             Bundle bundle = callerIntent.getExtras();
@@ -55,8 +64,7 @@ public class WordCardFlipActivity extends AppCompatActivity
             initializeData(ids, wordDraw);
         }
 
-        //WordCardRecyclerViewAdapter adapter = new WordCardRecyclerViewAdapter(words, WordCardFlipActivity.this);
-        //recyclerView.setAdapter(adapter);
+        ListView listView = findViewById(R.id.list_cards);
 
         adapter = new WordCardArrayAdapter(WordCardFlipActivity.this, words);
         listView.setAdapter(adapter);
@@ -77,8 +85,8 @@ public class WordCardFlipActivity extends AppCompatActivity
                 String definition = cursor.getString(cursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_TEXT));
                 int correctLast = cursor.getInt(cursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_CORRECT_LAST));
                 int wrongLast = cursor.getInt(cursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_WORD_CARD_WRONG_LAST));
-                int total = correctLast + wrongLast;
-                double percentage = total == 0 ? 0 : ((double) correctLast/(double) total);
+                int totalLast = correctLast + wrongLast;
+                double percentage = totalLast == 0 ? 0 : ((double) correctLast/(double) totalLast);
                 int percentageInt = (int)(percentage * 100);
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(DefinitionsEntry._ID));
 
@@ -155,9 +163,6 @@ public class WordCardFlipActivity extends AppCompatActivity
         ArrayList<Integer> ids = updateResultInDB();
 
         Intent finishTestIntent = new Intent(WordCardFlipActivity.this, FinishTestActivity.class);
-        /*Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(FinishTestActivity.INTENT_RESULT, adapter.getWordList());
-        finishTestIntent.putExtra(FinishTestActivity.INTENT_BUNDLE, bundle);*/
         finishTestIntent.putIntegerArrayListExtra(FinishTestActivity.INTENT_RESULT, ids);
         finishTestIntent.putExtra(FinishTestActivity.INTENT_RESULT_CORRECT, correctResultTotal);
         finishTestIntent.putExtra(FinishTestActivity.INTENT_RESULT_WRONG, wrongResultTotal);

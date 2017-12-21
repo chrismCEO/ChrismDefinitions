@@ -32,7 +32,6 @@ public class ChrismAdHelper implements Serializable
     private Context mContext;
     private IabHelper mHelper;
     private boolean mCallback;
-    private boolean mHelperSetup = false;
     private static String SKU_IN_APP_PURCHASE;
     private boolean isPremiumUser = false;
 
@@ -66,12 +65,10 @@ public class ChrismAdHelper implements Serializable
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess())
                 {
-                    mHelperSetup = false;
                     Log.e(LOG_TAG, "IabHelper not setup");
                 }
                 else
                 {
-                    mHelperSetup = true;
                     try {
                         mHelper.queryInventoryAsync(mInventoryListener);
 
@@ -100,14 +97,16 @@ public class ChrismAdHelper implements Serializable
      */
     public void createAd(RelativeLayout view)
     {
-        boolean isWordCardActiviy = mContext.getClass() == WordCardActivity.class;
+        boolean isWordCardActiviy = mContext.getClass() == WordCardActivity.class ||
+                                    mContext.getClass() == WordCardFlipActivity.class;
 
         if (showAd())
         {
             AdView mAdView = new AdView(mContext);
             RelativeLayout.LayoutParams adParams = new
-                    RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             TypedValue typedValue = new TypedValue();
             if (!isWordCardActiviy && mContext.getTheme().resolveAttribute(R.attr.actionBarSize, typedValue, true))
@@ -130,8 +129,9 @@ public class ChrismAdHelper implements Serializable
             mAdView.setAdSize(AdSize.SMART_BANNER);
 
             //Set the list to be below the ad
-            LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.contentMainLayout);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(//(RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+            LinearLayout linearLayout = view.findViewById(R.id.contentMainLayout);
+
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.MATCH_PARENT);
 
@@ -230,6 +230,10 @@ public class ChrismAdHelper implements Serializable
         return mHelper;
     }
 
+    /**
+     * Send a request to Google Play and pay to remove ads
+     * @return
+     */
     public boolean removeAds()
     {
         boolean result = false;

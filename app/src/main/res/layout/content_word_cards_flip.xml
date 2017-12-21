@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.chrismsolutions.chrismdefinitions.WordCardFlipActivity"
+    tools:showIn="@layout/activity_word_card_flip">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:id="@+id/list_cards"
+        android:dividerHeight="4dp"
+        android:divider="@null"
+        android:layout_margin="16dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:background="@color/colorAccent"
+        android:text="@string/btn_finish"
+        android:id="@+id/finish_test"
+        android:enabled="false"
+        android:layout_margin="8dp"
+        android:onClick="btnFinishTest"
+        />
+
+</LinearLayout>

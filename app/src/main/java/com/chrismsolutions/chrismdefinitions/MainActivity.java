@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
             setContentView(R.layout.activity_main);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //Show the logo in the action bar
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         //Create new folder when fab is clicked
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        listView = (ListView) findViewById(R.id.list);
+        listView = findViewById(R.id.list);
         listView.setEmptyView(findViewById(R.id.empty_view));
 
         adapter = new FolderCursorAdapter(this, readFolderDataFromDB());
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relative_layout_main);
+        RelativeLayout relativeLayout = findViewById(R.id.relative_layout_main);
         if (showAds)
         {
             adHelper.createAd(relativeLayout);//  = ChrismAdHelper.createAdStatic(this, relativeLayout);
@@ -305,6 +305,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.action_create_test:
                 Intent intent = new Intent(MainActivity.this, CreateTestActivity.class);
+                intent.putExtra(IS_PREMIUM_USER, !adHelper.showAd());
                 startActivity(intent);
                 break;
         }
