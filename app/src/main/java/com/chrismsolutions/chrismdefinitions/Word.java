@@ -2,12 +2,16 @@ package com.chrismsolutions.chrismdefinitions;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,8 +39,8 @@ public class Word
     int correctPoint, wrongPoint;
     CardView cardViewFront, cardViewBack;
     int id, backId;
-    private WordCardArrayAdapter.WordViewHolder.WordCardFrontFragment frontFragment;
-    private WordCardArrayAdapter.WordViewHolder.WordCardBackFragment backFragment;
+    private WordCardFrontFragment frontFragment;
+    private WordCardBackFragment backFragment;
     private TextView wordName;
     private TextView wordDefinition;
     private ImageView wrongAnswer;
@@ -66,8 +70,8 @@ public class Word
     {
         Log.i(LOG_TAG, "Setting first values for ID: " + id);
 
-        frontFragment = new WordCardArrayAdapter.WordViewHolder.WordCardFrontFragment();
-        backFragment = new WordCardArrayAdapter.WordViewHolder.WordCardBackFragment();
+        frontFragment = new WordCardFrontFragment();
+        backFragment = new WordCardBackFragment();
 
         frontFragment.word = this;
         backFragment.word = this;
@@ -335,5 +339,49 @@ public class Word
         dbID = in.readInt();
         correctPoint = in.readInt();
         wrongPoint = in.readInt();
+    }
+
+    /**
+     * A fragment representing the front of the card
+     */
+    public static class WordCardFrontFragment extends Fragment
+    {
+        Word word;
+
+        public WordCardFrontFragment()
+        {
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
+        {
+            View view = word.cardViewFront;
+            word.setValues(view);
+
+            return view;
+        }
+    }
+
+    /**
+     * A fragment representing the back of the card
+     */
+    public static class WordCardBackFragment extends Fragment
+    {
+        Word word;
+
+        public WordCardBackFragment()
+        {
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
+        {
+            View view = word.cardViewBack;
+            word.setValues(view);
+
+            return view;
+        }
     }
 }
