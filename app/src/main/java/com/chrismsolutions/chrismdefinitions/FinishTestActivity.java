@@ -52,8 +52,6 @@ public class FinishTestActivity extends AppCompatActivity
             if (intent.hasExtra(INTENT_RESULT))
             {
                 ids = intent.getIntegerArrayListExtra(INTENT_RESULT);
-                //Bundle bundle = (Bundle) intent.getParcelableExtra(INTENT_BUNDLE);
-                //words = (ArrayList<Word>) bundle.getSerializable(INTENT_RESULT);
             }
 
             if (intent.hasExtra(INTENT_RESULT_CORRECT))
@@ -68,7 +66,7 @@ public class FinishTestActivity extends AppCompatActivity
         }
 
 
-        TextView result = (TextView)findViewById(R.id.result);
+        TextView result = findViewById(R.id.result);
         int totalResult = correctResultTotal + wrongResultTotal;
         double percentageTotal = ((double) correctResultTotal) / ((double)totalResult);
         int percentageTotalInt = (int)(percentageTotal * 100);
@@ -92,6 +90,11 @@ public class FinishTestActivity extends AppCompatActivity
         listView.setAdapter(resultAdapter);
     }
 
+    /**
+     * Change the top result image based on result
+     * @param percentage
+     * @return
+     */
     @Contract(pure = true)
     static public int setDrawableTopResult(int percentage)
     {
@@ -121,6 +124,11 @@ public class FinishTestActivity extends AppCompatActivity
         return drawableId;
     }
 
+    /**
+     * Get the word cards drawn in the test, to show them in a list
+     * @param ids
+     * @return
+     */
     private Cursor queryWordCardsFromDB(ArrayList<Integer> ids)
     {
         String[] projection = {
@@ -159,12 +167,20 @@ public class FinishTestActivity extends AppCompatActivity
                 null);
     }
 
+    /**
+     * User has clicked on the "New test", go back to CreateTestActivity
+     * @param view
+     */
     public void btnRestartTest(View view)
     {
         Intent intent = new Intent(FinishTestActivity.this, CreateTestActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * User is done testing, go back to home activity
+     * @param view
+     */
     public void btnHome(View view)
     {
         Intent intent = new Intent(FinishTestActivity.this, MainActivity.class);

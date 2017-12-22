@@ -121,12 +121,12 @@ public class ExpandableWordCardListAdapter extends BaseExpandableListAdapter {
             view = layoutInflater.inflate(R.layout.list_item_word_cards, null);
         }
 
-        TextView textListChild = (TextView) view.findViewById(R.id.word_card_text);
+        TextView textListChild = view.findViewById(R.id.word_card_text);
         textListChild.setText(childText);
 
         final int wordCardId = mListHashMapIds.get(groupPosition);
 
-        ImageView imageEdit = (ImageView) view.findViewById(R.id.edit_word_card);
+        ImageView imageEdit = view.findViewById(R.id.edit_word_card);
         imageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +143,7 @@ public class ExpandableWordCardListAdapter extends BaseExpandableListAdapter {
             }
         });
 
-        ImageView imageDelete = (ImageView) view.findViewById(R.id.delete_word_card);
+        ImageView imageDelete = view.findViewById(R.id.delete_word_card);
         imageDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

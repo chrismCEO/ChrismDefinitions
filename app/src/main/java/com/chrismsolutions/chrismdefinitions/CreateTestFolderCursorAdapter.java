@@ -42,15 +42,15 @@ public class CreateTestFolderCursorAdapter extends CursorAdapter
     @Override
     public void bindView(View view, final Context context, Cursor cursor)
     {
-        TextView folderName = (TextView) view.findViewById(R.id.create_test_folder_name);
+        TextView folderName = view.findViewById(R.id.create_test_folder_name);
         folderName.setText(cursor.getString(cursor.getColumnIndexOrThrow(DefinitionsEntry.COLUMN_FOLDER_NAME)));
 
         final int id = cursor.getInt(cursor.getColumnIndexOrThrow(DefinitionsEntry._ID));
 
-        TextView folderCount = (TextView) view.findViewById(R.id.create_test_word_count);
+        TextView folderCount = view.findViewById(R.id.create_test_word_count);
         folderCount.setText(String.valueOf(getWordCount(id)));
 
-        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.create_test_folder_check);
+        final CheckBox checkBox = view.findViewById(R.id.create_test_folder_check);
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +67,13 @@ public class CreateTestFolderCursorAdapter extends CursorAdapter
         });
     }
 
+    /**
+     * User has checked a folder, store them in an array
+     * @param checkBox
+     * @param id
+     * @param context
+     * @param fromCheckbox
+     */
     private void onClickCheckbox(CheckBox checkBox,
                                  int id,
                                  Context context,
@@ -82,6 +89,11 @@ public class CreateTestFolderCursorAdapter extends CursorAdapter
         activity.folderCheckedChange(id);
     }
 
+    /**
+     * Count how many words are in this specific folder
+     * @param id
+     * @return
+     */
     private int getWordCount(int id)
     {
         return mContext.getContentResolver().query(

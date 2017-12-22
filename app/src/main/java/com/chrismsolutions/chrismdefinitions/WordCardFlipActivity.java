@@ -70,6 +70,11 @@ public class WordCardFlipActivity extends AppCompatActivity
         listView.setAdapter(adapter);
     }
 
+    /**
+     * Set the data on the card, including word name and definition, and statistics
+     * @param ids
+     * @param wordDraw
+     */
     private void initializeData(ArrayList<Integer> ids, int wordDraw)
     {
         ArrayList<Word> randomWords = new ArrayList<>();
@@ -111,6 +116,11 @@ public class WordCardFlipActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Get the random drawn words from the database
+     * @param ids
+     * @return
+     */
     private Cursor queryWordCardsFromDB(ArrayList<Integer> ids)
     {
         String[] projection = {
@@ -138,6 +148,9 @@ public class WordCardFlipActivity extends AppCompatActivity
                 null);
     }
 
+    /**
+     * Only enable the Finish button when all cards have been answered
+     */
     public void enableFinishButton()
     {
         Button btnFinish = (Button) findViewById(R.id.finish_test);
@@ -157,7 +170,10 @@ public class WordCardFlipActivity extends AppCompatActivity
         btnFinish.setEnabled(answerCount == wordList.size());
     }
 
-
+    /**
+     * Test is done, go to FinishTestActivity
+     * @param view
+     */
     public void btnFinishTest(View view)
     {
         ArrayList<Integer> ids = updateResultInDB();
@@ -169,6 +185,10 @@ public class WordCardFlipActivity extends AppCompatActivity
         startActivity(finishTestIntent);
     }
 
+    /**
+     * Update the database with the statistics from this test
+     * @return
+     */
     private ArrayList<Integer> updateResultInDB()
     {
         //ArrayList<Word> words = adapter.getWordList();
@@ -245,6 +265,11 @@ public class WordCardFlipActivity extends AppCompatActivity
         return ids;
     }
 
+    /**
+     * Get the specific word from the database
+     * @param dbID
+     * @return
+     */
     private Cursor getWordFromDB(int dbID)
     {
         String[] projection = new String[]{

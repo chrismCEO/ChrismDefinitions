@@ -36,10 +36,10 @@ public class CreateTestActivity extends AppCompatActivity
         setContentView(R.layout.activity_create_test);
 
         //Avoid focus on EditText
-        numberChooser = (EditText) findViewById(R.id.create_test_edit_number);
+        numberChooser = findViewById(R.id.create_test_edit_number);
         numberChooser.setSelected(false);
 
-        numberAvailableTextView = (TextView)findViewById(R.id.create_test_total_words);
+        numberAvailableTextView = findViewById(R.id.create_test_total_words);
         String numAvailString = " " + numberAvailable;
         numberAvailableTextView.setText(numAvailString);
 
@@ -64,6 +64,7 @@ public class CreateTestActivity extends AppCompatActivity
             @Override
             public void afterTextChanged(Editable s)
             {
+                //User is adding numbers, validate them
                 String numberString = s.toString();
                 if (TextUtils.isEmpty(s))
                 {
@@ -84,7 +85,7 @@ public class CreateTestActivity extends AppCompatActivity
             }
         });
 
-        ListView listView = (ListView) findViewById(R.id.folder_list_create_test);
+        ListView listView = findViewById(R.id.folder_list_create_test);
 
         Cursor folders = getFoldersFromDB();
         adapter = new CreateTestFolderCursorAdapter(CreateTestActivity.this, folders);
@@ -94,6 +95,10 @@ public class CreateTestActivity extends AppCompatActivity
         createFolderArray(folders);
     }
 
+    /**
+     * Add information about the folders in Folder objects for later use
+     * @param folderCursor
+     */
     private void createFolderArray(Cursor folderCursor)
     {
         folders = new ArrayList<>();
@@ -107,6 +112,11 @@ public class CreateTestActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Count how many words there are in a specific folder
+     * @param id
+     * @return
+     */
     private int getWordCount(int id)
     {
         int count = 0;
@@ -126,6 +136,10 @@ public class CreateTestActivity extends AppCompatActivity
         return count;
     }
 
+    /**
+     * Get all folders from the database
+     * @return
+     */
     private Cursor getFoldersFromDB()
     {
         String[] projection = {
@@ -141,6 +155,10 @@ public class CreateTestActivity extends AppCompatActivity
                 null);
     }
 
+    /**
+     * The user has (un)checked a folder, update the available number of words to choose from.
+     * @param id
+     */
     public void folderCheckedChange(int id)
     {
         numberAvailable = 0;
@@ -156,9 +174,12 @@ public class CreateTestActivity extends AppCompatActivity
         numberAvailableTextView.setText(numAvailString);
     }
 
+    /**
+     * Check if user has checked any folders
+     * @return
+     */
     private boolean folderChecked()
     {
-        SparseBooleanArray checkStates = adapter.getCheckStates();
         boolean checked = false;
 
         for (int i = 0; i < folders.size(); i++)
@@ -172,6 +193,11 @@ public class CreateTestActivity extends AppCompatActivity
         return checked;
     }
 
+    /**
+     * User has clicked on the "Start test" button, see if any folders are checked before
+     * moving to WordCardFlipActivity
+     * @param view
+     */
     public void btnStartTest(View view)
     {
         boolean ok = true;
@@ -196,9 +222,11 @@ public class CreateTestActivity extends AppCompatActivity
 
         if (ok)
         {
+            //Go to the list of word cards
             Intent intent = new Intent(CreateTestActivity.this, WordCardFlipActivity.class);
             ArrayList<Integer> ids = new ArrayList<>();
 
+            //Draw from these folders
             for (int i = 0; i < folders.size(); i++)
             {
                 if (adapter.getChecked(folders.get(i).id))

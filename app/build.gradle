@@ -7,8 +7,8 @@ android {
         applicationId "com.chrismsolutions.chrismdefinitions"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 15
-        versionName "1.25"
+        versionCode 16
+        versionName "1.26"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

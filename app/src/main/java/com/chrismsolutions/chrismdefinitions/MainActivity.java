@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         RelativeLayout relativeLayout = findViewById(R.id.relative_layout_main);
         if (showAds)
         {
-            adHelper.createAd(relativeLayout);//  = ChrismAdHelper.createAdStatic(this, relativeLayout);
+            adHelper.createAd(relativeLayout);
         }
 
         //For test purposes only
@@ -249,6 +249,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Search has been started, create the adapter to show results based on user query
+     * @param query
+     * @return
+     */
     private android.support.v4.widget.CursorAdapter getSuggestionsAdapter(String query)
     {
         String[] from = new String[]

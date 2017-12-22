@@ -58,6 +58,10 @@ public class Word
         context = (WordCardFlipActivity)mContext;
     }
 
+    /**
+     * Set the values that don't change between states
+     * @param view
+     */
     void setFirstValues(View view)
     {
         Log.i(LOG_TAG, "Setting first values for ID: " + id);
@@ -77,6 +81,10 @@ public class Word
         }
     }
 
+    /**
+     * Set the values based on state of the card
+     * @param view
+     */
     void setValues(final View view)
     {
         if (frontFragment == null || backFragment == null)
@@ -104,7 +112,7 @@ public class Word
         {
             if (wordName == null)
             {
-                wordName = (TextView) cardViewFront.findViewById(R.id.word_name_card);
+                wordName = cardViewFront.findViewById(R.id.word_name_card);
             }
             wordName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -118,8 +126,8 @@ public class Word
 
             //Set the images and colors
             //Correct or wrong answer image
-            correctImage = (ImageView)cardViewFront.findViewById(R.id.card_correct_word);
-            wrongImage = (ImageView)cardViewFront.findViewById(R.id.card_wrong_word);
+            correctImage = cardViewFront.findViewById(R.id.card_correct_word);
+            wrongImage = cardViewFront.findViewById(R.id.card_wrong_word);
 
             if (correctPoint == 1)
             {
@@ -136,8 +144,8 @@ public class Word
             }
 
             //Set the smiley and percentage based on statistics
-            ImageView statSmiley = (ImageView) cardViewFront.findViewById(R.id.statistic_smiley);
-            TextView statPercentage = (TextView) cardViewFront.findViewById(R.id.statistic_percentage);
+            ImageView statSmiley = cardViewFront.findViewById(R.id.statistic_smiley);
+            TextView statPercentage = cardViewFront.findViewById(R.id.statistic_percentage);
 
             statPercentage.setText(context.getString(R.string.percentage, percentage));
             statSmiley.setColorFilter(ContextCompat.getColor(context, R.color.colorSecondaryText));
@@ -167,7 +175,7 @@ public class Word
         {
             if (wordDefinition == null)
             {
-                wordDefinition = (TextView) cardViewBack.findViewById(R.id.word_definition_card);
+                wordDefinition = cardViewBack.findViewById(R.id.word_definition_card);
             }
             wordDefinition.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -179,7 +187,7 @@ public class Word
 
             if (wrongAnswer == null)
             {
-                wrongAnswer = (ImageView) view.findViewById(R.id.card_wrong_definition);
+                wrongAnswer = view.findViewById(R.id.card_wrong_definition);
                 wrongAnswer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v)
@@ -196,7 +204,7 @@ public class Word
 
             if (correctAnswer == null)
             {
-                correctAnswer = (ImageView) view.findViewById(R.id.card_correct_definition);
+                correctAnswer = view.findViewById(R.id.card_correct_definition);
                 correctAnswer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -229,19 +237,19 @@ public class Word
         correct.setColorFilter(ContextCompat.getColor(context, R.color.white));
     }
 
-    void setWrongColors(ImageView correct, ImageView wrong)
+    private void setWrongColors(ImageView correct, ImageView wrong)
     {
         wrong.setColorFilter(ContextCompat.getColor(context, R.color.fail_red));
         correct.setColorFilter(ContextCompat.getColor(context, R.color.suspend));
     }
 
-    void setCorrectColors(ImageView correct, ImageView wrong)
+    private void setCorrectColors(ImageView correct, ImageView wrong)
     {
         correct.setColorFilter(ContextCompat.getColor(context, R.color.success_green));
         wrong.setColorFilter(ContextCompat.getColor(context, R.color.suspend));
     }
 
-    void flipCard()
+    private void flipCard()
     {
         if (showingBack)
         {
@@ -298,12 +306,6 @@ public class Word
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-            /*
-            name = mName;
-            definition = mDefinition;
-            percentage = mPercentage;
-            dbID = mDbId;
-             */
         dest.writeString(name);
         dest.writeString(definition);
         dest.writeInt(percentage);
