@@ -102,6 +102,24 @@ public class WordCardFlipActivity extends AppCompatActivity
                         id);
                 word.setContext(this);
                 randomWords.add(word);
+
+                int extraDraws;
+                if (totalLast == MAX_LAST_RESULTS)
+                {
+                    //Only weigh the randomness on words we have tested five or more times
+                    extraDraws = getExtraDraws(percentageInt);
+                }
+                else
+                {
+                    //Not yet tested this word five or more times, should have high probability to
+                    //get drawn
+                    extraDraws = MAX_LAST_RESULTS;
+                }
+
+                for (; extraDraws > 0; extraDraws--)
+                {
+                    randomWords.add(word);
+                }
             }
         }
 
@@ -110,10 +128,46 @@ public class WordCardFlipActivity extends AppCompatActivity
         {
             Random random = new Random();
             int randomIndex = random.nextInt(randomWords.size());
+            if (words.contains(randomWords.get(randomIndex)))
+            {
+                randomWords.remove(randomIndex);
+                continue;
+            }
             words.add(randomWords.get(randomIndex));
             randomWords.remove(randomIndex);
             wordDraw--;
         }
+    }
+
+    /**
+     * Lower percentage needs to weigh more, so we add that word more times
+     * the lower the percentage
+     * @param percentageInt
+     * @return
+     */
+    private int getExtraDraws(int percentageInt)
+    {
+        int extraDraws = 0;
+
+        switch (percentageInt)
+        {
+            case Word.ZERO:
+                extraDraws++;
+
+            case Word.TWENTY_PERCENT:
+                extraDraws++;
+
+            case Word.FORTY_PERCENT:
+                extraDraws++;
+
+            case Word.SIXTY_PERCENT:
+                extraDraws++;
+
+            case Word.EIGHTY_PERCENT:
+                extraDraws++;
+                break;
+        }
+        return extraDraws;
     }
 
     /**

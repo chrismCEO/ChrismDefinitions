@@ -25,10 +25,11 @@ import java.util.ArrayList;
 public class Word
         implements Parcelable
 {
-    public static final int TWENTY_PERCENT = 20;
-    public static final int FORTY_PERCENT = 40;
-    public static final int SIXTY_PERCENT = 60;
-    public static final int EIGHTY_PERCENT = 80;
+    static final int ZERO = 0;
+    static final int TWENTY_PERCENT = 20;
+    static final int FORTY_PERCENT = 40;
+    static final int SIXTY_PERCENT = 60;
+    static final int EIGHTY_PERCENT = 80;
 
     private static final String LOG_TAG = Word.class.getName();
     private WordCardFlipActivity context;
