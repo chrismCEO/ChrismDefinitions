@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.chrismsolutions.chrismdefinitions.MainActivity"
+    android:id="@+id/relative_layout_main"
     >
 
     <android.support.design.widget.AppBarLayout

@@ -46,7 +46,7 @@ public class WordCardActivity extends AppCompatActivity
     private String nameQuery;
 
     private boolean showAds = false;
-    ChrismAdHelper adHelper;
+    WordCardAdHelper adHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +67,16 @@ public class WordCardActivity extends AppCompatActivity
         {
             showAds = !getIntent().getBooleanExtra(MainActivity.IS_PREMIUM_USER, false);
         }
-        if (showAds)
+
+        setContentView(R.layout.activity_word_card);
+        /*if (showAds)
         {
             setContentView(R.layout.activity_word_card_ads);
         }
         else
         {
             setContentView(R.layout.activity_word_card);
-        }
+        }*/
 
         FloatingActionButton fabWordCard = findViewById(R.id.fabWordCard);
         fabWordCard.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +161,8 @@ public class WordCardActivity extends AppCompatActivity
         RelativeLayout relativeLayout = findViewById(R.id.relative_layout_word_cards);
         if (showAds)
         {
-            adHelper  = ChrismAdHelper.createAdStatic(this, relativeLayout);
+            adHelper  = new WordCardAdHelper(this, false, false);//WordCardAdHelper.createAdStatic(this, relativeLayout);
+            adHelper.createAd(relativeLayout);
         }
 
         getLoaderManager().initLoader(LOADER_ID, null, this);

@@ -50,7 +50,8 @@ public class WordCardFlipActivity extends AppCompatActivity
         RelativeLayout relativeLayout = findViewById(R.id.card_flip_container);
         if (showAds)
         {
-            adHelper  = ChrismAdHelper.createAdStatic(this, relativeLayout);
+            adHelper  = new WordCardAdHelper(this, false, false);//WordCardAdHelper.createAdStatic(this, relativeLayout);
+            adHelper.createAd(relativeLayout);
         }
 
         if (getIntent() != null)

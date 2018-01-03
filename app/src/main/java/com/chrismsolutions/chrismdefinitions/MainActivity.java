@@ -24,7 +24,6 @@ import android.widget.RelativeLayout;
 
 import com.chrismsolutions.chrismdefinitions.billingUtil.IabHelper;
 import com.chrismsolutions.chrismdefinitions.data.DefinitionsContract.DefinitionsEntry;
-import com.chrismsolutions.chrismdefinitions.data.TestDB;
 import com.chrismsolutions.chrismdefinitions.data.WordSuggestionDB;
 
 public class MainActivity extends AppCompatActivity
@@ -39,34 +38,14 @@ public class MainActivity extends AppCompatActivity
     private boolean showAds;
     ChrismAdHelper adHelper;
     IabHelper mHelper;
+    private MenuItem removeAdMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Show ads if user has not payed to suppress them
-        if (getIntent() != null && getIntent().hasExtra(MainActivity.IS_PREMIUM_USER))
-        {
-            showAds = !getIntent().getBooleanExtra(MainActivity.IS_PREMIUM_USER, true);
-            if (showAds)
-            {
-                adHelper = new ChrismAdHelper(this, true, true);
-            }
-        }
-        else
-        {
-            adHelper = new ChrismAdHelper(this, true, false);
-        }
-
-        if (showAds)
-        {
-            setContentView(R.layout.activity_main_ads);
-        }
-        else
-        {
-            setContentView(R.layout.activity_main);
-        }
-
+        setContentView(R.layout.activity_main);
+        setContentViewAds();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -107,12 +86,6 @@ public class MainActivity extends AppCompatActivity
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
-        RelativeLayout relativeLayout = findViewById(R.id.relative_layout_main);
-        if (showAds)
-        {
-            adHelper.createAd(relativeLayout);
-        }
-
         //For test purposes only
         //TestDB.testDB(MainActivity.this);
 
@@ -137,18 +110,35 @@ public class MainActivity extends AppCompatActivity
 
     public void changeDesign()
     {
-        //There's been a change in ownership, change the layout
-        if (adHelper.showAd())
+        //There's been a possible change in ownership, change the layout
+        RelativeLayout relativeLayout = findViewById(R.id.relative_layout_main);
+        showAds = adHelper.showAd();
+        adHelper.createAd(relativeLayout);
+
+        if (removeAdMenuItem != null)
         {
-            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-            intent.putExtra(MainActivity.IS_PREMIUM_USER, false);
-            startActivity(intent);
+            removeAdMenuItem.setVisible(adHelper.showAd());
         }
-        else if(showAds && !adHelper.showAd())
+    }
+
+    /**
+     * Set the @adHelper object if we show ads or need to check ownership
+     */
+    private void setContentViewAds()
+    {
+        //Show ads if user has not payed to remove them
+        if (getIntent() != null && getIntent().hasExtra(ChrismAdHelper.IS_PREMIUM_USER))
         {
-            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-            intent.putExtra(MainActivity.IS_PREMIUM_USER, true);
-            startActivity(intent);
+            showAds = !getIntent().getBooleanExtra(ChrismAdHelper.IS_PREMIUM_USER, true);
+            adHelper = new WordCardAdHelper(this, false, false);
+            if (showAds)
+            {
+                changeDesign();
+            }
+        }
+        else
+        {
+            adHelper = new WordCardAdHelper(this, true, false);
         }
     }
 
@@ -182,16 +172,14 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        if (showAds)
-        {
-            MenuItem removeAdMenuItem = (MenuItem) menu.findItem(R.id.remove_ads);
-            removeAdMenuItem.setVisible(adHelper.showAd());
-        }
+        //show the menu item to remove ads if user has not payed
+        removeAdMenuItem = menu.findItem(R.id.remove_ads);
+        removeAdMenuItem.setVisible(adHelper.showAd());
 
         final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) menu.findItem(R.id.searchFolder).getActionView();
 
-        //Include showAds
+        //Include showAds in search
         Bundle appData = new Bundle();
         appData.putBoolean(MainActivity.IS_PREMIUM_USER, !showAds);
         //noinspection RestrictedApi

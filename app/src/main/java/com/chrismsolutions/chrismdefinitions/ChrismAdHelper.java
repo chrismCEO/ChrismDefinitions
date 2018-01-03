@@ -1,12 +1,8 @@
 package com.chrismsolutions.chrismdefinitions;
 
 import android.content.Context;
-import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.chrismsolutions.chrismdefinitions.billingUtil.IabHelper;
@@ -14,13 +10,12 @@ import com.chrismsolutions.chrismdefinitions.billingUtil.IabResult;
 import com.chrismsolutions.chrismdefinitions.billingUtil.Inventory;
 import com.chrismsolutions.chrismdefinitions.billingUtil.Purchase;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import java.io.Serializable;
 
 /**
- * Created by Christian Myrvold on 08.11.2017.
+ * Created by Christian Myrvold on 30.11.2017.
  */
 
 public class ChrismAdHelper implements Serializable
@@ -28,11 +23,13 @@ public class ChrismAdHelper implements Serializable
     private static final int REQUEST_CODE = 10001;
     private static final String LOG_TAG = ChrismAdHelper.class.getName();
     public static final String ADHELPER_CLASS = LOG_TAG;
-    private static boolean TEST_UNIT = true;
-    private Context mContext;
+    private static boolean TEST_UNIT = false;
+    public Context mContext;
     private IabHelper mHelper;
     private boolean mCallback;
+    private boolean mHelperSetup = false;
     private static String SKU_IN_APP_PURCHASE;
+    public static final String IS_PREMIUM_USER = "IS_PREMIUM_USER";
     private boolean isPremiumUser = false;
 
     public ChrismAdHelper(Context context, boolean initHelper, boolean callback)
@@ -62,13 +59,16 @@ public class ChrismAdHelper implements Serializable
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
         {
             @Override
-            public void onIabSetupFinished(IabResult result) {
+            public void onIabSetupFinished(IabResult result)
+            {
                 if (!result.isSuccess())
                 {
+                    mHelperSetup = false;
                     Log.e(LOG_TAG, "IabHelper not setup");
                 }
                 else
                 {
+                    mHelperSetup = true;
                     try {
                         mHelper.queryInventoryAsync(mInventoryListener);
 
@@ -97,49 +97,9 @@ public class ChrismAdHelper implements Serializable
      */
     public void createAd(RelativeLayout view)
     {
-        boolean isWordCardActiviy = mContext.getClass() == WordCardActivity.class ||
-                                    mContext.getClass() == WordCardFlipActivity.class;
+        AdView mAdView = createAppSpecificAd(view);
 
-        if (showAd())
-        {
-            AdView mAdView = new AdView(mContext);
-            RelativeLayout.LayoutParams adParams = new
-                    RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.MATCH_PARENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-            TypedValue typedValue = new TypedValue();
-            if (!isWordCardActiviy && mContext.getTheme().resolveAttribute(R.attr.actionBarSize, typedValue, true))
-            {
-                int marginTop =  TypedValue.complexToDimensionPixelSize(typedValue.data, mContext.getResources().getDisplayMetrics());
-                adParams.setMargins(0, marginTop, 0, 0);
-            }
-            adParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-            adParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                adParams.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                mAdView.setId(View.generateViewId());
-            }
-
-            mAdView.setLayoutParams(adParams);
-            mAdView.setAdSize(AdSize.SMART_BANNER);
-
-            //Set the list to be below the ad
-            LinearLayout linearLayout = view.findViewById(R.id.contentMainLayout);
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT);
-
-            layoutParams.addRule(RelativeLayout.BELOW, mAdView.getId());
-
-            linearLayout.setLayoutParams(layoutParams);
-
-
+        if (mAdView != null) {
             AdRequest adRequest = new AdRequest.Builder().build();
 
             //Insert correct adUnitId depending on if this is a test unit
@@ -156,6 +116,16 @@ public class ChrismAdHelper implements Serializable
 
             mAdView.loadAd(adRequest);
         }
+    }
+
+    /**
+     * Overrun this method for each app, as there can be different layout ID's
+     * @param view
+     * @return
+     */
+    public AdView createAppSpecificAd(RelativeLayout view)
+    {
+        return null;
     }
 
     /**
@@ -221,7 +191,7 @@ public class ChrismAdHelper implements Serializable
                     {
                         isPremiumUser = false;
                     }
-                    refreshCallingActivity();
+                    //refreshCallingActivity();
                 }
             };
 
@@ -230,10 +200,6 @@ public class ChrismAdHelper implements Serializable
         return mHelper;
     }
 
-    /**
-     * Send a request to Google Play and pay to remove ads
-     * @return
-     */
     public boolean removeAds()
     {
         boolean result = false;
