@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                 Uri uri = Uri.withAppendedPath(Uri.parse(DefinitionsEntry.CONTENT_ITEM_TYPE_WORD_CARD), String.valueOf(id));
                 Intent wordCardsList = new Intent(MainActivity.this, WordCardActivity.class);
                 wordCardsList.putExtra(URI_STRING, uri);
-                wordCardsList.putExtra(IS_PREMIUM_USER, !showAds);
+                wordCardsList.putExtra(ChrismAdHelper.IS_PREMIUM_USER, !showAds);
                 startActivity(wordCardsList);
             }
         });
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity
 
         //show the menu item to remove ads if user has not payed
         removeAdMenuItem = menu.findItem(R.id.remove_ads);
-        removeAdMenuItem.setVisible(adHelper.showAd());
+        removeAdMenuItem.setVisible(showAds);//adHelper.showAd());
 
         final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView) menu.findItem(R.id.searchFolder).getActionView();
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                     Intent searchIntent = new Intent(MainActivity.this, WordCardActivity.class);
                     searchIntent.setAction(Intent.ACTION_SEARCH);
                     searchIntent.putExtra(SearchManager.QUERY, query);
-                    searchIntent.putExtra(MainActivity.IS_PREMIUM_USER, !showAds);
+                    searchIntent.putExtra(ChrismAdHelper.IS_PREMIUM_USER, !showAds);
                     startActivity(searchIntent);
                 }
                 return true;
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.action_create_test:
                 Intent intent = new Intent(MainActivity.this, CreateTestActivity.class);
-                intent.putExtra(IS_PREMIUM_USER, adHelper == null ? !showAds : !adHelper.showAd());
+                intent.putExtra(ChrismAdHelper.IS_PREMIUM_USER, !showAds);//adHelper == null ? !showAds : !adHelper.showAd());
                 startActivity(intent);
                 break;
         }

@@ -422,7 +422,7 @@ public class WordCardActivity extends AppCompatActivity
     private void goBack()
     {
         Intent intent = new Intent(WordCardActivity.this, MainActivity.class);
-        intent.putExtra(MainActivity.IS_PREMIUM_USER, !showAds);
+        intent.putExtra(ChrismAdHelper.IS_PREMIUM_USER, !showAds);
         startActivity(intent);
     }
 }
